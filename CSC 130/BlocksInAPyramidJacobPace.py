@@ -23,7 +23,7 @@ def calcBlocks(a,b):
         b += (a**2)
         calcBlocks(a,b)
     return b
-       
+       #testing something
 #################################MAIN##############################################
 #Using the function(s) defined above, ask the user for the number of pyramid levels
 levels=levelInput()
