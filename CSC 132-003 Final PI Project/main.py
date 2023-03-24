@@ -8,13 +8,13 @@ pygame.init()
 # set some global variables
 menuCycleHorizontal = [pygame.K_a, pygame.K_d]
 menuCycleVertical = [pygame.K_w, pygame.K_s]
-clock = pygame.time.Clock()
 
-# set screen size
+# set screen size and initialize some pygame stuff
 res = (720, 720)
 screen = pygame.display.set_mode(res)
+clock = pygame.time.Clock()
 
-# set a color witht he RGB code for html
+# set color(s) with the RGB code for html
 white = (255, 255, 255)
 screen.fill(white)
 
@@ -38,15 +38,16 @@ back_hover = pygame.image.load('images/button_back_hover.png').convert_alpha()
 
 # Initialize the buttons via the "game" file (where we put the recycleable code)
 # when making the buttons the inputs look like this "x, y, image, imgHover, scale, selected by default?"
+# start menu buttons
 start_button = game.Button(50, 500, start_img, start_hover, 0.8, True)
 exit_button = game.Button(295, 500, exit_img, exit_hover, 0.8, False)
 options_button = game.Button(500, 500, options_img, options_hover, 1, False)
-
+# options menu buttons
 back_button = game.Button(50, 500 , back_img, back_hover, 1, True)
 exit_button2 = game.Button(295, 500, exit_img, exit_hover, 0.8, False)
 
-
-player = game.Player(100,100)
+# initalize the player
+player = game.Player(100,100) # taken areguments are the default x,y coordinates
 ##### ACTUAL CODE STARTS HERE #####
 
 # Display the window
@@ -57,7 +58,6 @@ temp_font = pygame.font.SysFont("Arial", 25)
 def draw_text(text, font, text_color,x, y):
     img = font.render(text, True, text_color)
     screen.blit(img, (x, y)) 
-
 # when calling this function it should look like
 # draw_text("What you want the text to be", your font variable, color of the text, x coordinate, y coordinate)                            
 
