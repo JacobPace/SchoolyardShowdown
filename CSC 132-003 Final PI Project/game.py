@@ -1,5 +1,10 @@
 import pygame
 pygame.init()
+
+# This is where we will put all of the reuseable code so that there is no
+# need to keep copy pasting -e.g. making buttons for the screen
+
+# Button class should need no further editing
 class Button:
     def __init__(self, x, y, image, imgHover, scale, selected):
         width = image.get_width()
@@ -18,9 +23,28 @@ class Button:
             surface.blit(self.image, (self.rect.x, self.rect.y))
     
     def changeButton(self, other):
-        if not self.selected:
-            self.selected = True
-            other.selected = False
+        self.selected = True
+        other.selected = False
 
     def action(self):
         return True
+    
+class Player:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.width = 32
+        self.height = 32
+        self.image = pygame.Surface([self.width, self.height])
+        self.rect = self.image.get_rect()
+        self.rect.center = [self.x, self.y]
+        self.image.fill((255,0,0))
+        
+
+        self.move_right = False
+        self.move_left = False
+        self.move_up = False
+        self.move_down = False
+
+    def draw(self, surface):
+        surface.blit(self.image, (self.x, self.y))   

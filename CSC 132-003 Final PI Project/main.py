@@ -8,10 +8,7 @@ pygame.init()
 # set some global variables
 menuCycleHorizontal = [pygame.K_a, pygame.K_d]
 menuCycleVertical = [pygame.K_w, pygame.K_s]
-
-# making the menu states
-current_menu = "start"
-prev_menu = None
+clock = pygame.time.Clock()
 
 # set screen size
 res = (720, 720)
@@ -45,14 +42,24 @@ start_button = game.Button(50, 500, start_img, start_hover, 0.8, True)
 exit_button = game.Button(295, 500, exit_img, exit_hover, 0.8, False)
 options_button = game.Button(500, 500, options_img, options_hover, 1, False)
 
-
 back_button = game.Button(50, 500 , back_img, back_hover, 1, True)
 exit_button2 = game.Button(295, 500, exit_img, exit_hover, 0.8, False)
 
+
+player = game.Player(100,100)
 ##### ACTUAL CODE STARTS HERE #####
 
 # Display the window
 pygame.display.flip()
+
+##### DISPLAY TEXT TO SCREEN #####
+temp_font = pygame.font.SysFont("Arial", 30)
+def draw_text(text, font, text_color,x, y):
+    img = font.render(text, True, text_color)
+    screen.blit(img, (x, y)) 
+
+# when calling this function it should look like
+# draw_text("What you want the text to be", your font variable, color of the text, x coordinate, y coordinate)                            
 
 ##### START MENU #####
 def StartMenu():
@@ -104,20 +111,20 @@ def StartMenu():
                 # Checks for the "Enter / Return" key being pressed and which button is selected
                 if event.key == pygame.K_RETURN and start_button.selected:
                     if start_button.action():
-                        print("START")
+                        #current_menu = None
                         buttonCooldown = True
+                        screen.fill(white)
+                        Game()
                 if event.key == pygame.K_RETURN and exit_button.selected:
                     if exit_button.action():
                         print("EXIT")
-                        buttonCooldown = True
+                        pygame.quit()
                 if event.key == pygame.K_RETURN and options_button.selected:
                     current_menu = "options"
                     screen.fill(white)
                     OptionsMenu()
-                if event.key == pygame.K_SPACE:
-                    current_menu = "options"
-                    screen.fill(white)
         pygame.display.update()
+        clock.tick(60)
 ##### END OF CURRENT START MENU CODE #####
 
 ##### OPTIONS MENU #####
@@ -127,18 +134,17 @@ def OptionsMenu():
         back_button.draw(screen)
         exit_button2.draw(screen)
         for event in pygame.event.get():
-            if event == pygame.QUIT:
+            if event.type == pygame.QUIT:
                 pygame.quit()
                 
             if event.type == pygame.KEYDOWN:
                 buttonCooldown = False
                 if event.key in menuCycleHorizontal:
-                    # change selected button from start to exit
+                    
                     if back_button.selected and not buttonCooldown:
                         exit_button2.changeButton(back_button)
                         buttonCooldown = True
 
-                    # Change the exit button to the start button
                     if exit_button2.selected and not buttonCooldown:
                         back_button.changeButton(exit_button2)
                         buttonCooldown = True
@@ -151,8 +157,68 @@ def OptionsMenu():
                         
                 if event.key == pygame.K_RETURN and exit_button2.selected:
                     if exit_button2.action():
-                        print("EXIT")
+                        pygame.quit()
         pygame.display.update()
-    # updates the frames of the game 
+        clock.tick(60)
+
+def pauseMenu():
+    paused = True
+    while paused:
+        screen.fill((255,255,255))
+        draw_text("The game is now paused, press 'R' to resume!", temp_font, (0,0,0), 360, 360)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit
+            
+
+
+def Game():
+    game = True
+    moveRight = False
+    moveLeft = False
+    moveDown = False
+    moveUp = False
+    while game:
+        screen.fill((0,0,0))
+        player.draw(screen)
+        for event in pygame.event.get():
+            
+            if event.type == pygame.QUIT:
+               pygame.quit()
+            
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_a:
+                    moveLeft = True
+                if event.key == pygame.K_s:
+                    moveDown = True
+                if event.key == pygame.K_w:
+                    moveUp = True
+                if event.key == pygame.K_d:
+                    moveRight = True
+            elif event.type == pygame.KEYUP:
+                if event.key == pygame.K_a:
+                    moveLeft = False
+                if event.key == pygame.K_s:
+                    moveDown = False
+                if event.key == pygame.K_w:
+                    moveUp = False
+                if event.key == pygame.K_d:
+                    moveRight = False
+
+        if moveRight and player.x<720-player.width:
+            player.x += 5
+        if moveLeft and player.x>0:
+            player.x -= 5
+        if moveDown and player.y<720-player.height:
+            player.y += 5
+        if moveUp and player.y>0:
+            player.y -= 5
+           
+        pygame.display.update()
+        clock.tick(60)
+            
+
+
+
 StartMenu()
 pygame.quit()
