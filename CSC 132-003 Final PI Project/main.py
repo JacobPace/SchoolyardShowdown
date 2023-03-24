@@ -53,7 +53,7 @@ player = game.Player(100,100)
 pygame.display.flip()
 
 ##### DISPLAY TEXT TO SCREEN #####
-temp_font = pygame.font.SysFont("Arial", 30)
+temp_font = pygame.font.SysFont("Arial", 25)
 def draw_text(text, font, text_color,x, y):
     img = font.render(text, True, text_color)
     screen.blit(img, (x, y)) 
@@ -83,27 +83,29 @@ def StartMenu():
                         exit_button.changeButton(start_button)
                         buttonCooldown = True
 
-                    # Change the exit button to the start button
+                    # Change the exit button to the options button
                     if exit_button.selected and not buttonCooldown:
                         options_button.changeButton(exit_button)
                         buttonCooldown = True
 
+                    # Change from options button to start button
                     if options_button.selected and not buttonCooldown:
                         start_button.changeButton(options_button)
                         buttonCooldown = True
 
                 # Press the "A" key to move the selected button to the left
                 if event.key == pygame.K_a:
-                    # change selected button from start to exit
+                    # change selected button from start to options
                     if start_button.selected and not buttonCooldown:
                         options_button.changeButton(start_button)
                         buttonCooldown = True
 
-                    # Change the exit button to the start button
+                    # Change the options button to the exit button
                     if options_button.selected and not buttonCooldown:
                         exit_button.changeButton(options_button)
                         buttonCooldown = True
 
+                    # Change from exit to start
                     if exit_button.selected and not buttonCooldown:
                         start_button.changeButton(exit_button)
                         buttonCooldown = True
@@ -160,18 +162,26 @@ def OptionsMenu():
                         pygame.quit()
         pygame.display.update()
         clock.tick(60)
+##### END OF CURRENT OPTIONS MENU CODE #####
 
+##### PAUSE MENU #####
 def pauseMenu():
     paused = True
     while paused:
-        screen.fill((255,255,255))
-        draw_text("The game is now paused, press 'R' to resume!", temp_font, (0,0,0), 360, 360)
+        pygame.draw.rect(screen, white, pygame.Rect(50, 50, 600, 600))
+        draw_text("The game is now paused, press 'SPACE' to resume!", temp_font, (0,0,0), 55, 360)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.quit
-            
+                pygame.quit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    paused = False
+                    Game()
+        pygame.display.update()
+        clock.tick(60)
+##### END OF PAUSE EMNU #####
 
-
+##### MAIN GAME LOOP #####
 def Game():
     game = True
     moveRight = False
@@ -182,10 +192,10 @@ def Game():
         screen.fill((0,0,0))
         player.draw(screen)
         for event in pygame.event.get():
-            
             if event.type == pygame.QUIT:
                pygame.quit()
             
+            ##### Movement / Pause Menu #####
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_a:
                     moveLeft = True
@@ -195,6 +205,11 @@ def Game():
                     moveUp = True
                 if event.key == pygame.K_d:
                     moveRight = True
+                # Check if player wants to pause the game
+                if event.key == pygame.K_p:
+                    moveDown, moveLeft, moveRight, moveUp = False, False, False, False
+                    game = False
+                    pauseMenu()
             elif event.type == pygame.KEYUP:
                 if event.key == pygame.K_a:
                     moveLeft = False
@@ -205,6 +220,7 @@ def Game():
                 if event.key == pygame.K_d:
                     moveRight = False
 
+        # Actual movement of player with border constraints
         if moveRight and player.x<720-player.width:
             player.x += 5
         if moveLeft and player.x>0:
@@ -216,9 +232,7 @@ def Game():
            
         pygame.display.update()
         clock.tick(60)
-            
-
-
+##### END OF CURRENT MAIN GAME LOOP #####  
 
 StartMenu()
 pygame.quit()
