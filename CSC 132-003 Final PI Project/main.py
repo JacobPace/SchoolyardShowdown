@@ -64,6 +64,7 @@ def draw_text(text, font, text_color,x, y):
 ##### START MENU #####
 def StartMenu():
     current_menu = "start"
+    screen.fill(white)
     while current_menu == "start":
         # event checker
         start_button.draw(screen)
@@ -170,6 +171,7 @@ def pauseMenu():
     while paused:
         pygame.draw.rect(screen, white, pygame.Rect(50, 50, 600, 600))
         draw_text("The game is now paused, press 'SPACE' to resume!", temp_font, (0,0,0), 55, 360)
+        draw_text("Or press 'BACKSPACE' to return to the start menu!", temp_font, (0,0,0),55, 400)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -177,6 +179,9 @@ def pauseMenu():
                 if event.key == pygame.K_SPACE:
                     paused = False
                     Game()
+                if event.key == pygame.K_BACKSPACE:
+                    paused = False
+                    StartMenu()
         pygame.display.update()
         clock.tick(60)
 ##### END OF PAUSE EMNU #####
