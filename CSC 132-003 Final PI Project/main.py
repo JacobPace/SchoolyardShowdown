@@ -10,8 +10,9 @@ menuCycleHorizontal = [pygame.K_a, pygame.K_d]
 menuCycleVertical = [pygame.K_w, pygame.K_s]
 
 # set screen size and initialize some pygame stuff
-res = (720, 720)
-screen = pygame.display.set_mode(res)
+WIDTH = 1024
+HEIGHT = 720
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
 
 # set color(s) with the RGB code for html
@@ -226,11 +227,11 @@ def Game():
                     moveRight = False
 
         # Actual movement of player with border constraints
-        if moveRight and player.x<720-player.width:
+        if moveRight and player.x<WIDTH-player.width:
             player.x += 5
         if moveLeft and player.x>0:
             player.x -= 5
-        if moveDown and player.y<720-player.height:
+        if moveDown and player.y<HEIGHT-player.height:
             player.y += 5
         if moveUp and player.y>0:
             player.y -= 5
