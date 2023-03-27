@@ -30,15 +30,15 @@ class Button:
         return True
     
 class Player:
-    def __init__(self, x, y):
+    def __init__(self, x, y, image):
         self.x = x
         self.y = y
         self.width = 32
         self.height = 32
-        self.image = pygame.Surface([self.width, self.height])
+        self.image = pygame.transform.scale(image, (self.width, self.height))
         self.rect = self.image.get_rect()
         self.rect.center = [self.x, self.y]
-        self.image.fill((255,0,0))
+        #self.image.fill((255,0,0))
         
 
         self.move_right = False
