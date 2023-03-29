@@ -145,7 +145,7 @@ def OptionsMenu():
                 
             if event.type == pygame.KEYDOWN:
                 buttonCooldown = False
-                if event.key in menuCycleHorizontal:
+                if event.key in menuCycleLeftUp or event.key in menuCycleRightDown:
                     
                     if back_button.selected and not buttonCooldown:
                         exit_button2.changeButton(back_button)
