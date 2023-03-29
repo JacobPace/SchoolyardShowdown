@@ -38,7 +38,7 @@ class Player:
         self.image = pygame.transform.scale(image, (self.width, self.height))
         self.rect = self.image.get_rect()
         self.rect.center = [self.x, self.y]
-        #self.image.fill((255,0,0))
+        
         
 
         self.move_right = False

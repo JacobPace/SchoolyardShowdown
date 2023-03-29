@@ -6,14 +6,14 @@ import game
 pygame.init()
 
 # set some global variables
-menuCycleHorizontal = [pygame.K_a, pygame.K_d]
-menuCycleVertical = [pygame.K_w, pygame.K_s]
+menuCycleRightDown = [pygame.K_RIGHT, pygame.K_d, pygame.K_s, pygame.K_DOWN]
+menuCycleLeftUp = [pygame.K_w, pygame.K_a, pygame.K_LEFT, pygame.K_UP]
 
 # set screen size and initialize some pygame stuff
 WIDTH = 1024
 HEIGHT = 720
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-clock = pygame.time.Clock()
+clock = pygame.time.Clock() # FPS controller
 
 # set color(s) with the RGB code for html
 white = (255, 255, 255)
@@ -81,7 +81,7 @@ def StartMenu():
                 buttonCooldown = False
 
                 # Press the "D" key to move slected button to the right
-                if event.key == pygame.K_d:
+                if event.key in menuCycleRightDown:
                     # change selected button from start to exit
                     if start_button.selected and not buttonCooldown:
                         exit_button.changeButton(start_button)
@@ -98,7 +98,7 @@ def StartMenu():
                         buttonCooldown = True
 
                 # Press the "A" key to move the selected button to the left
-                if event.key == pygame.K_a:
+                if event.key in menuCycleLeftUp:
                     # change selected button from start to options
                     if start_button.selected and not buttonCooldown:
                         options_button.changeButton(start_button)
