@@ -10,8 +10,8 @@ menuCycleRightDown = [pygame.K_RIGHT, pygame.K_d, pygame.K_s, pygame.K_DOWN]
 menuCycleLeftUp = [pygame.K_w, pygame.K_a, pygame.K_LEFT, pygame.K_UP]
 
 # set screen size and initialize some pygame stuff
-WIDTH = 1024
-HEIGHT = 720
+WIDTH = 1920
+HEIGHT = 1000
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock() # FPS controller
 
@@ -23,29 +23,29 @@ screen.fill(white)
 pygame.display.set_caption("Test window")
 
 # images for the buttons (start menu)
-start_img = pygame.image.load('images/start_btn.png').convert_alpha()
-start_hover = pygame.image.load('images/start_btn_hover.png').convert_alpha()
+start_img = pygame.image.load('images/StartButton.png').convert_alpha()
+start_hover = pygame.image.load('images/StartButtonSelected.png').convert_alpha()
 
-exit_img = pygame.image.load('images/exit_btn.png').convert_alpha()
-exit_hover = pygame.image.load('images/exit_btn_hover.png').convert_alpha()
+exit_img = pygame.image.load('images/ExitButton.png').convert_alpha()
+exit_hover = pygame.image.load('images/ExitButtonSelected.png').convert_alpha()
 
-options_img = pygame.image.load('images/button_options.png').convert_alpha()
-options_hover = pygame.image.load('images/button_options_hover.png').convert_alpha()
+options_img = pygame.image.load('images/OptionsButton.png').convert_alpha()
+options_hover = pygame.image.load('images/OptionsButtonSelected.png').convert_alpha()
 
 #################################################################################
 # images for options menu
-back_img = pygame.image.load('images/button_back.png').convert_alpha()
-back_hover = pygame.image.load('images/button_back_hover.png').convert_alpha()
+back_img = pygame.image.load('images/BackButton.png').convert_alpha()
+back_hover = pygame.image.load('images/BackButtonSelected.png').convert_alpha()
 
 # Initialize the buttons via the "game" file (where we put the recycleable code)
 # when making the buttons the inputs look like this "x, y, image, imgHover, scale, selected by default?"
 # start menu buttons
-start_button = game.Button(50, 100, start_img, start_hover, 0.8, True)
-exit_button = game.Button(50, 250, exit_img, exit_hover, 0.8, False)
-options_button = game.Button(50, 400, options_img, options_hover, 1, False)
+start_button = game.Button(50, 100, start_img, start_hover, 0.2, True)
+exit_button = game.Button(50, 250, exit_img, exit_hover, 3, False)
+options_button = game.Button(50, 400, options_img, options_hover, 3, False)
 # options menu buttons
-back_button = game.Button(50, 500 , back_img, back_hover, 1, True)
-exit_button2 = game.Button(295, 500, exit_img, exit_hover, 0.8, False)
+back_button = game.Button(50, 500 , back_img, back_hover, 3, True)
+exit_button2 = game.Button(295, 500, exit_img, exit_hover, 3, False)
 
 # initalize the player
 lil_dude = pygame.image.load('images/lil_dude.png').convert_alpha()
@@ -79,6 +79,9 @@ def StartMenu():
         
             if event.type == pygame.KEYDOWN:
                 buttonCooldown = False
+
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
 
                 # Press the "D" key to move slected button to the right
                 if event.key in menuCycleRightDown:
@@ -127,7 +130,7 @@ def StartMenu():
                         pygame.quit()
                 if event.key == pygame.K_RETURN and options_button.selected:
                     current_menu = "options"
-                    screen.fill(white)
+                    screen.fill((0,255,255))
                     OptionsMenu()
         pygame.display.update()
         clock.tick(60)
@@ -158,7 +161,7 @@ def OptionsMenu():
                 # Checks for the "Enter / Return" key being pressed and which button is selected
                 if event.key == pygame.K_RETURN and back_button.selected:
                     if back_button.action():
-                        screen.fill(white)
+                        screen.fill((0,255,255))
                         StartMenu()
                         
                 if event.key == pygame.K_RETURN and exit_button2.selected:
