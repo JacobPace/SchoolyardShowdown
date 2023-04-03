@@ -48,3 +48,35 @@ class Player:
 
     def draw(self, surface):
         surface.blit(self.image, (self.x, self.y))   
+
+class NPC:
+    def ___init__(self, name=""):
+        self.name = name
+
+class Enemy(NPC):
+    def __init__(self):
+        NPC.__init__(self)
+        self.health = 10
+        self.inventory = []
+        self.attacks = ["Rock", "Paper", "Scissors"]
+        self.actions = [self.attacks, "Block", "Heal"]
+
+class RockGrunt(Enemy):
+    def __init__(self):
+        Enemy.__init__(self)
+        self.type = "Rock"
+
+class PaperGrunt(Enemy):
+    def __init__(self):
+        Enemy.__init__(self)
+        self.type = "Paper"
+
+class ScissorsGrunt(Enemy):
+    def __init__(self):
+        Enemy.__init__(self)
+        self.type = "Scissors"
+
+class Boss(Enemy):
+    def __init__(self):
+        Enemy.__init__(self, name="Joel")
+        self.health = 15

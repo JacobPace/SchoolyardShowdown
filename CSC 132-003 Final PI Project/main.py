@@ -123,7 +123,7 @@ def StartMenu():
                         #current_menu = None
                         buttonCooldown = True
                         screen.fill(white)
-                        Game()
+                        StoryMode()
                 if event.key == pygame.K_RETURN and exit_button.selected:
                     if exit_button.action():
                         print("EXIT")
@@ -184,7 +184,7 @@ def pauseMenu():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     paused = False
-                    Game()
+                    StoryMode()
                 if event.key == pygame.K_BACKSPACE:
                     paused = False
                     StartMenu()
@@ -192,8 +192,8 @@ def pauseMenu():
         clock.tick(60)
 ##### END OF PAUSE EMNU #####
 
-##### MAIN GAME LOOP #####
-def Game():
+##### STORY MODE #####
+def StoryMode():
     game = True
     moveRight = False
     moveLeft = False
@@ -245,5 +245,8 @@ def Game():
         clock.tick(60)
 ##### END OF CURRENT MAIN GAME LOOP #####  
 
+##### BOSS RUSH MODE #####
+def BossRush():
+    pass
 StartMenu()
 pygame.quit()
