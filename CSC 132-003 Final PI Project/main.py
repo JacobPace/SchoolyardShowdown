@@ -51,6 +51,12 @@ exit_button2 = game.Button(295, 500, exit_img, exit_hover, 3, False)
 lil_dude = pygame.image.load('images/lil_dude.png').convert_alpha()
 player = game.Player(100,100, lil_dude) # taken areguments are the default x,y coordinates
 
+textBoxImg = pygame.image.load('images/TextBox.png').convert_alpha()
+# images class takes x,y values of the top left coordinate, image variable, and scale
+TextBox = game.Image(0, 750, textBoxImg, 1)
+
+
+
 ##### ACTUAL CODE STARTS HERE #####
 
 # Display the window
@@ -127,7 +133,8 @@ def StartMenu():
                 if event.key == pygame.K_RETURN and exit_button.selected:
                     if exit_button.action():
                         print("EXIT")
-                        pygame.quit()
+                        BossRush()
+                        #pygame.quit()
                 if event.key == pygame.K_RETURN and options_button.selected:
                     current_menu = "options"
                     screen.fill((0,255,255))
@@ -247,6 +254,14 @@ def StoryMode():
 
 ##### BOSS RUSH MODE #####
 def BossRush():
-    pass
+    while True:
+        screen.fill(white)
+        TextBox.draw(screen)
+        draw_text("Testing", temp_font, (0,0,0), WIDTH/2, HEIGHT/2)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+        pygame.display.update()
+        clock.tick(60)
 StartMenu()
 pygame.quit()
