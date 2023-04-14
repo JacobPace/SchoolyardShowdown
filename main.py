@@ -34,9 +34,10 @@ player = Player(100,100, lil_dude) # taken areguments are the default x,y coordi
 
 enemyImg = pygame.image.load('images/enemy.png').convert_alpha()
 enemyTest = Enemy(enemyImg)
+enemytest = Image(1500, 100, enemyImg, 10)
 
 # images class takes x,y values of the top left coordinate, image variable, and scale
-playerTest = Image(100, 500, lil_dude, 1)
+playerTest = Image(100, 400, lil_dude, 10)
 
 ##### ACTUAL CODE STARTS HERE #####
 
@@ -102,7 +103,6 @@ def ChangingButtons(buttons, integral):
                 else:
                     buttons[i-1].changeButton(buttons[i])
                     break
-    #StartMenu()
 
 ##### START MENU #####
 def StartMenu():
@@ -276,8 +276,9 @@ def Battle(foe):
     DISPLAYSURF.fill(white)
     TextBox.draw(DISPLAYSURF)
     playerTest.draw(DISPLAYSURF)
-    enemyTest.draw(DISPLAYSURF)
+    enemytest.draw(DISPLAYSURF)
     #turn = 0
+    
     SlowText(enemyLine1, 100, 850) if not enemyLine1.displayed else None
     sleep(2)
     TextBox.draw(DISPLAYSURF)
@@ -287,8 +288,9 @@ def Battle(foe):
     SlowText(enemyLine2, 100, 850) if not enemyLine2.displayed else None
     sleep(2)
     TextBox.draw(DISPLAYSURF)
+    
     BattleAttackMenu(foe)
-
+    
 def BattleAttackMenu(foe):
     PlayerAction = ""
     FoeAction = ""
@@ -300,14 +302,23 @@ def BattleAttackMenu(foe):
         PlayerAction = ""
         FoeAction = ""
         FinalResult = ""
-        if menu == "selection":
+
+        if foe.health <= 0:
+            TextBox.draw(DISPLAYSURF)
+            SlowText(enemyLoss, 100, 850) if not enemyLoss.displayed else None
+            sleep(1)
+            TextBox.draw(DISPLAYSURF)
+            SlowText(victory, 100, 850) if not victory.displayed else None
+            draw_text(victoryAlt, temp_font,black, 100, 850)
+
+        if menu == "selection" and foe.health > 0:
             TextBox.draw(DISPLAYSURF)
             AttackButton.draw(DISPLAYSURF)
             RunButton.draw(DISPLAYSURF)
             BagButton.draw(DISPLAYSURF)
             pygame.display.update()
 
-        if menu == "action":
+        if menu == "action" and foe.health > 0:
             TextBox.draw(DISPLAYSURF)
             RockButton.draw(DISPLAYSURF)
             PaperButton.draw(DISPLAYSURF)
@@ -324,6 +335,9 @@ def BattleAttackMenu(foe):
                 buttonCooldown = False
                 if event.key == pygame.K_BACKSPACE:
                     StartMenu()
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    break
                 if event.key in menuCycleRightDown and not buttonCooldown and menu =="selection":
                     ChangingButtons(BattleSelctionButtons, 1)
                     buttonCooldown = True
@@ -366,54 +380,49 @@ def BattleAttackMenu(foe):
 
         if PlayerAction == FoeAction:
             FinalResult = "It's a draw?"
-        if PlayerAction == "Block":
+        elif PlayerAction == "Block":
             FinalResult = "You blocked it!"
-        if FoeAction == "Block":
+        elif FoeAction == "Block":
             FinalResult = "They blocked!"
 
-        if PlayerAction == "Rock" and FoeAction == "Paper":
+        elif PlayerAction == "Rock" and FoeAction == "Paper":
             FinalResult = "That hurt!"
             player.health -= 1
-        if PlayerAction == "Rock" and FoeAction == "Scissors":
+        elif PlayerAction == "Rock" and FoeAction == "Scissors":
             FinalResult = "That'll show them!"
             foe.health -= 1
         
             
-        if PlayerAction == "Paper" and FoeAction == "Scissors":
+        elif PlayerAction == "Paper" and FoeAction == "Scissors":
             FinalResult = "That hurt!"
             player.health -= 1
-        if PlayerAction == "Paper" and FoeAction == "Rock":
+        elif PlayerAction == "Paper" and FoeAction == "Rock":
             FinalResult = "That'll show them!"
             foe.health -= 1
 
-        if PlayerAction == "Scissors" and FoeAction == "Rock":
+        elif PlayerAction == "Scissors" and FoeAction == "Rock":
             FinalResult = "That hurt!"
             player.health -= 1
-        if PlayerAction == "Scissors" and FoeAction == "Paper":
+        elif PlayerAction == "Scissors" and FoeAction == "Paper":
             FinalResult = "That'll show them!"
             foe.health -= 1
 
         if PlayerAction != "":
+            print("Bug fixing")
+            print(f"Player: {PlayerAction}")
+            print(f"Enemy {FoeAction}")
             TextBox.draw(DISPLAYSURF)
             print(FinalResult)
             SlowText2(FinalResult, 100, 850)
             sleep(2)
             menu == "selection"
 
-        if foe.health == 0:
-            break
         pygame.display.update()
         clock.tick(60)
-
-    TextBox.draw(DISPLAYSURF)
-    enemyLoss = "Enemy: OH NO!"
-    SlowText2(enemyLoss, 100, 850)
-    sleep(3)
-    TextBox.draw(DISPLAYSURF)
-    victory = "YOU WIN!"
-    SlowText2(victory, 100, 850)
-    pygame.display.update()
-    clock.tick(60)
+    
+        
+        pygame.display.update()
+        clock.tick(60)
 
 def LoseGame():
     pass

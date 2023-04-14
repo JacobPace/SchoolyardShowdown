@@ -74,12 +74,8 @@ class Enemy(NPC):
     def __init__(self, battleSprite):
         NPC.__init__(self)
         self.battleSprite = pygame.transform.scale(battleSprite, (32, 32))
-        self.health = 10
+        self.health = 5
         self.inventory = []
-        self.attacks = ["Rock", "Paper", "Scissors"]
-        self.actions = [self.attacks, "Block", "Bag"]
-        
-
 
     def draw(self, surface):
         surface.blit(self.battleSprite, (750, 200))
@@ -88,15 +84,16 @@ class Enemy(NPC):
         choice = randint(1, 10)
         if choice > 1:
             actionChoice = randint(1,9)
-            if actionChoice in range(1, 3):
+            if actionChoice == 1 or actionChoice == 2 or actionChoice == 3:
                 print("Testing\tRock")
                 return "Rock"
-            if actionChoice in range(4, 6):
+            if actionChoice == 4 or actionChoice ==5 or actionChoice ==6:
                 print("Testing\tPaper")
                 return "Paper"
-            if actionChoice in range(7, 9):
+            if actionChoice == 7 or actionChoice == 8 or actionChoice ==9:
                 print("Testing\tScissors")
                 return "Scissors"
+            print(actionChoice)
         if choice == 1:
             print("Testing\tBlock")
             return "Block"

@@ -16,3 +16,7 @@ LoseRound = Dialouge("Lose!")
 DrawRound = Dialouge("It's a Draw?")
 PlayerBlock = Dialouge("You blocked it!")
 EnemyBlock = Dialouge("They blocked!")
+
+enemyLoss = Dialouge("Enemy: OH NO!")
+victory = Dialouge("YOU WIN!")
+victoryAlt = "YOU WIN!"
