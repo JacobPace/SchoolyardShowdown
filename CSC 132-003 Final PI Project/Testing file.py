@@ -118,6 +118,7 @@ def changeButtons(buttons):
         if integral == 0:
             break
 
+"""
 print(f"{b1}\t{b2}\t{b3}\t{b4}")
 limiter = (len(buttonList)-1)
 print(limiter)
@@ -150,5 +151,12 @@ while True:
                         buttonList[i].changeSelected(buttonList[i-1])
                         break
             print(f"{b1}\t{b2}\t{b3}\t{b4}")
+            """
 #changeButtons(buttonList)
 #print(buttonList[2])
+
+results = ("test", "test2")
+result1, result2 = results[0], results[1]
+print(results)
+print(result1)
+print(result2)

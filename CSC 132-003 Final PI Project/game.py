@@ -1,12 +1,14 @@
 import pygame
 pygame.init()
+from random import randint
 
 # This is where we will put all of the reuseable code so that there is no
 # need to keep copy pasting -e.g. making buttons for the screen
 
 # Button class should need no further editing
 class Button:
-    def __init__(self, x, y, image, imgHover, scale, selected):
+    def __init__(self, name, x, y, image, imgHover, scale, selected):
+        self.name = name
         width = image.get_width()
         height = image.get_height()
         self.image = pygame.transform.scale(image, (int(width*scale), int(height*scale)))
@@ -28,6 +30,9 @@ class Button:
 
     def action(self):
         return True
+    
+    def __str__(self):
+        return f"{self.name}\t Selected: {self.selected}"
 
 class Image:
     def __init__(self, x, y, image, scale):
@@ -42,6 +47,7 @@ class Image:
 
 class Player:
     def __init__(self, x, y, image):
+        self.health = 10
         self.x = x
         self.y = y
         self.width = 32
@@ -70,13 +76,30 @@ class Enemy(NPC):
         self.battleSprite = pygame.transform.scale(battleSprite, (32, 32))
         self.health = 10
         self.inventory = []
-        self.attacks = ["Rock", "Paper", "Scissors", "Back"]
+        self.attacks = ["Rock", "Paper", "Scissors"]
         self.actions = [self.attacks, "Block", "Bag"]
         
 
 
     def draw(self, surface):
         surface.blit(self.battleSprite, (750, 200))
+
+    def action(self):
+        choice = randint(1, 10)
+        if choice > 1:
+            actionChoice = randint(1,9)
+            if actionChoice in range(1, 3):
+                print("Testing\tRock")
+                return "Rock"
+            if actionChoice in range(4, 6):
+                print("Testing\tPaper")
+                return "Paper"
+            if actionChoice in range(7, 9):
+                print("Testing\tScissors")
+                return "Scissors"
+        if choice == 1:
+            print("Testing\tBlock")
+            return "Block"
 
 class RockGrunt(Enemy):
     def __init__(self):
