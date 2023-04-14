@@ -2,7 +2,12 @@
 
 # Initialize basic pygame template and all needed globals / images / files ect.
 import pygame
-import game
+from game import *
+from Dialouge import *
+import sys
+from random import randint
+from time import sleep
+from Constants import *
 pygame.init()
 
 # set some global variables
@@ -10,51 +15,30 @@ menuCycleRightDown = [pygame.K_RIGHT, pygame.K_d, pygame.K_s, pygame.K_DOWN]
 menuCycleLeftUp = [pygame.K_w, pygame.K_a, pygame.K_LEFT, pygame.K_UP]
 
 # set screen size and initialize some pygame stuff
-WIDTH = 1920
-HEIGHT = 1000
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-clock = pygame.time.Clock() # FPS controller
+
 
 # set color(s) with the RGB code for html
 white = (255, 255, 255)
+black = (0, 0, 0)
 screen.fill(white)
 
 # gives the window a name
 pygame.display.set_caption("Test window")
 
-# images for the buttons (start menu)
-start_img = pygame.image.load('images/StartButton.png').convert_alpha()
-start_hover = pygame.image.load('images/StartButtonSelected.png').convert_alpha()
-
-exit_img = pygame.image.load('images/ExitButton.png').convert_alpha()
-exit_hover = pygame.image.load('images/ExitButtonSelected.png').convert_alpha()
-
-options_img = pygame.image.load('images/OptionsButton.png').convert_alpha()
-options_hover = pygame.image.load('images/OptionsButtonSelected.png').convert_alpha()
-
-#################################################################################
-# images for options menu
-back_img = pygame.image.load('images/BackButton.png').convert_alpha()
-back_hover = pygame.image.load('images/BackButtonSelected.png').convert_alpha()
-
 # Initialize the buttons via the "game" file (where we put the recycleable code)
 # when making the buttons the inputs look like this "x, y, image, imgHover, scale, selected by default?"
 # start menu buttons
-start_button = game.Button(50, 100, start_img, start_hover, 0.2, True)
-exit_button = game.Button(50, 250, exit_img, exit_hover, 3, False)
-options_button = game.Button(50, 400, options_img, options_hover, 3, False)
-# options menu buttons
-back_button = game.Button(50, 500 , back_img, back_hover, 3, True)
-exit_button2 = game.Button(295, 500, exit_img, exit_hover, 3, False)
 
-# initalize the player
+
+# initalize the player/enemy for testing purposes
 lil_dude = pygame.image.load('images/lil_dude.png').convert_alpha()
-player = game.Player(100,100, lil_dude) # taken areguments are the default x,y coordinates
+player = Player(100,100, lil_dude) # taken areguments are the default x,y coordinates
 
-textBoxImg = pygame.image.load('images/TextBox.png').convert_alpha()
+enemyImg = pygame.image.load('images/enemy.png').convert_alpha()
+enemyTest = Enemy(enemyImg)
+
 # images class takes x,y values of the top left coordinate, image variable, and scale
-TextBox = game.Image(0, 750, textBoxImg, 1)
-
+playerTest = Image(100, 500, lil_dude, 1)
 
 
 ##### ACTUAL CODE STARTS HERE #####
@@ -68,20 +52,62 @@ def draw_text(text, font, text_color,x, y):
     img = font.render(text, True, text_color)
     screen.blit(img, (x, y)) 
 # when calling this function it should look like
-# draw_text("What you want the text to be", your font variable, color of the text, x coordinate, y coordinate)                            
+# draw_text("What you want the text to be", your font variable, color of the text, x coordinate, y coordinate)  
+
+# Print text slowly
+def SlowText(string, x, y):
+    text = ''
+    for i in range(len(string.text)):
+        text += string.text[i]
+        text_surface = temp_font.render(text, True, black)
+        text_rect = text_surface.get_rect()
+        text_rect.topleft = (x, y)
+        screen.blit(text_surface, text_rect)
+        pygame.display.update()
+        pygame.time.wait(50)
+    string.displayed = True
+
+# not working how i want it to, I will do more testing later
+def ChangingButtons(buttons, integral):
+    limiter = (len(buttons)-1)
+    NegLimiter = (limiter * -1)
+    if integral == 1:
+        for i in range(len(buttons)+1):
+            if buttons[i].selected == True:
+                if i+1 > limiter:
+                    buttons[i].changeButton(buttons[0])
+                    i = 0
+                    break
+                else:
+                    buttons[i].changeButton(buttons[i+1])
+                    break
+
+    if integral == -1:
+        for i in range(len(buttons)+1):
+            i *= -1
+            if buttons[i].selected == True:
+                if i-1 < NegLimiter:
+                    buttons[i].changeButton(buttons[0])
+                    i = 0
+                    break
+                else:
+                    buttons[i].changeButton(buttons[i-1])
+                    break
+    #StartMenu()
 
 ##### START MENU #####
 def StartMenu():
-    current_menu = "start"
     screen.fill((0,255,255))
-    while current_menu == "start":
+    while True:
         # event checker
         start_button.draw(screen)
         exit_button.draw(screen)
         options_button.draw(screen)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                pygame.display.quit()
                 pygame.quit()
+                break
         
             if event.type == pygame.KEYDOWN:
                 buttonCooldown = False
@@ -89,9 +115,8 @@ def StartMenu():
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
 
-                # Press the "D" key to move slected button to the right
-                if event.key in menuCycleRightDown:
-                    # change selected button from start to exit
+                if event.key in menuCycleRightDown and not buttonCooldown:
+                    #change selected button from start to exit
                     if start_button.selected and not buttonCooldown:
                         exit_button.changeButton(start_button)
                         buttonCooldown = True
@@ -107,7 +132,6 @@ def StartMenu():
                         buttonCooldown = True
 
                 # Press the "A" key to move the selected button to the left
-                if event.key in menuCycleLeftUp:
                     # change selected button from start to options
                     if start_button.selected and not buttonCooldown:
                         options_button.changeButton(start_button)
@@ -126,21 +150,19 @@ def StartMenu():
                 # Checks for the "Enter / Return" key being pressed and which button is selected
                 if event.key == pygame.K_RETURN and start_button.selected:
                     if start_button.action():
-                        #current_menu = None
                         buttonCooldown = True
                         screen.fill(white)
                         StoryMode()
                 if event.key == pygame.K_RETURN and exit_button.selected:
                     if exit_button.action():
-                        print("EXIT")
                         BossRush()
                         #pygame.quit()
                 if event.key == pygame.K_RETURN and options_button.selected:
-                    current_menu = "options"
                     screen.fill((0,255,255))
-                    OptionsMenu()
-        pygame.display.update()
-        clock.tick(60)
+                    #OptionsMenu()
+                    BossRush()
+            pygame.display.update()
+            clock.tick(60)
 ##### END OF CURRENT START MENU CODE #####
 
 ##### OPTIONS MENU #####
@@ -151,7 +173,9 @@ def OptionsMenu():
         exit_button2.draw(screen)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                pygame.display.quit()
                 pygame.quit()
+                break
                 
             if event.type == pygame.KEYDOWN:
                 buttonCooldown = False
@@ -187,7 +211,9 @@ def pauseMenu():
         draw_text("Or press 'BACKSPACE' to return to the start menu!", temp_font, (0,0,0),55, 400)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                pygame.display.quit()
                 pygame.quit()
+                break
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     paused = False
@@ -211,7 +237,9 @@ def StoryMode():
         player.draw(screen)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-               pygame.quit()
+                pygame.display.quit()
+                pygame.quit()
+                break
             
             ##### Movement / Pause Menu #####
             if event.type == pygame.KEYDOWN:
@@ -238,6 +266,9 @@ def StoryMode():
                 if event.key == pygame.K_d:
                     moveRight = False
 
+            pygame.display.update()
+            clock.tick(60)
+
         # Actual movement of player with border constraints
         if moveRight and player.x<WIDTH-player.width:
             player.x += 5
@@ -248,20 +279,136 @@ def StoryMode():
         if moveUp and player.y>0:
             player.y -= 5
            
-        pygame.display.update()
-        clock.tick(60)
 ##### END OF CURRENT MAIN GAME LOOP #####  
 
 ##### BOSS RUSH MODE #####
 def BossRush():
+    Battle(enemyTest)
+
+def Battle(foe):
+    screen.fill(white)
+    TextBox.draw(screen)
+    playerTest.draw(screen)
+    enemyTest.draw(screen)
+    turn = 0
+    SlowText(enemyLine1, 100, 850) if not enemyLine1.displayed else None
+    sleep(2)
+    TextBox.draw(screen)
+    SlowText(playerOpeningLine1, 100, 850) if not playerOpeningLine1.displayed else None
+    sleep(2)
+    TextBox.draw(screen)
+    SlowText(enemyLine2, 100, 850) if not enemyLine2.displayed else None
+    sleep(2)
+    TextBox.draw(screen)
+    BattleSelectionMenu()
+
+def BattleSelectionMenu():
     while True:
-        screen.fill(white)
         TextBox.draw(screen)
-        draw_text("Testing", temp_font, (0,0,0), WIDTH/2, HEIGHT/2)
+        AttackButton.draw(screen)
+        RunButton.draw(screen)
+        BagButton.draw(screen)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                pygame.display.quit()
                 pygame.quit()
+                break
+            if event.type == pygame.KEYDOWN:
+                buttonCooldown = False
+                if event.key == pygame.K_BACKSPACE:
+                    StartMenu()
+                if event.key in menuCycleRightDown:
+                    if AttackButton.selected and not buttonCooldown:
+                        RunButton.changeButton(AttackButton)
+                        buttonCooldown = True
+                    if RunButton.selected and not buttonCooldown:
+                        BagButton.changeButton(RunButton)
+                        buttonCooldown = True
+                    if BagButton.selected and not buttonCooldown:
+                        AttackButton.changeButton(BagButton)
+                        buttonCooldown = True
+
+                if event.key in menuCycleLeftUp:
+                    if AttackButton.selected and not buttonCooldown:
+                        BagButton.changeButton(AttackButton)
+                        buttonCooldown = True
+                    if BagButton.selected and not buttonCooldown:
+                        RunButton.changeButton(BagButton)
+                        buttonCooldown = True
+                    if RunButton.selected and not buttonCooldown:
+                        AttackButton.changeButton(RunButton)
+                        buttonCooldown = True 
+
+                if event.key == pygame.K_RETURN and AttackButton.selected:
+                    BattleAttackMenu()    
         pygame.display.update()
         clock.tick(60)
+
+def BattleAttackMenu():
+    while True:
+        TextBox.draw(screen)
+        RockButton.draw(screen)
+        PaperButton.draw(screen)
+        ScissorsButton.draw(screen)
+        BlockButton.draw(screen)
+        BackButton.draw(screen)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.display.quit()
+                pygame.quit()
+            if event.type == pygame.KEYDOWN:
+                buttonCooldown = False
+                if event.key in menuCycleRightDown:
+                    if RockButton.selected and not buttonCooldown:
+                        PaperButton.changeButton(RockButton)
+                        buttonCooldown = True
+                    if PaperButton.selected and not buttonCooldown:
+                        ScissorsButton.changeButton(PaperButton)
+                        buttonCooldown = True
+                    if ScissorsButton.selected and not buttonCooldown:
+                        BlockButton.changeButton(ScissorsButton)
+                        buttonCooldown = True
+                    if BlockButton.selected and not buttonCooldown:
+                        BackButton.changeButton(BlockButton)
+                        buttonCooldown = True
+                    if BackButton.selected and not buttonCooldown:
+                        RockButton.changeButton(BackButton)
+                        buttonCooldown = True
+
+                if event.key in menuCycleLeftUp:
+                    if RockButton.selected and not buttonCooldown:
+                        BackButton.changeButton(RockButton)
+                        buttonCooldown = True
+                    if BackButton.selected and not buttonCooldown:
+                        BlockButton.changeButton(BackButton)
+                        buttonCooldown = True
+                    if BlockButton.selected and not buttonCooldown:
+                        ScissorsButton.changeButton(BlockButton)
+                        buttonCooldown = True
+                    if ScissorsButton.selected and not buttonCooldown:
+                        PaperButton.changeButton(ScissorsButton)
+                        buttonCooldown = True
+                    if PaperButton.selected  and not buttonCooldown:
+                        RockButton.changeButton(PaperButton)
+                        buttonCooldown = True
+
+                if event.key == pygame.K_RETURN and BackButton.selected:
+                    BattleSelectionMenu()
+
+
+        pygame.display.update()
+        clock.tick(60)
+
+def Lose():
+    pass
+
+def Win():
+    pass
+
+def Credits():
+    pass
+
+
 StartMenu()
+pygame.display.quit()
 pygame.quit()

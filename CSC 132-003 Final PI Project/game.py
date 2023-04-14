@@ -50,12 +50,12 @@ class Player:
         self.rect = self.image.get_rect()
         self.rect.center = [self.x, self.y]
         
-        
-
         self.move_right = False
         self.move_left = False
         self.move_up = False
         self.move_down = False
+
+
 
     def draw(self, surface):
         surface.blit(self.image, (self.x, self.y))   
@@ -65,12 +65,18 @@ class NPC:
         self.name = name
 
 class Enemy(NPC):
-    def __init__(self):
+    def __init__(self, battleSprite):
         NPC.__init__(self)
+        self.battleSprite = pygame.transform.scale(battleSprite, (32, 32))
         self.health = 10
         self.inventory = []
-        self.attacks = ["Rock", "Paper", "Scissors"]
-        self.actions = [self.attacks, "Block", "Heal"]
+        self.attacks = ["Rock", "Paper", "Scissors", "Back"]
+        self.actions = [self.attacks, "Block", "Bag"]
+        
+
+
+    def draw(self, surface):
+        surface.blit(self.battleSprite, (750, 200))
 
 class RockGrunt(Enemy):
     def __init__(self):
