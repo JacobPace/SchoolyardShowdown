@@ -7,3 +7,5 @@ for n in numStr:
     countZeros = int(str(n.count("0")))
     counter += countZeros
 print(counter)
+
+# test
