@@ -253,8 +253,6 @@ def StoryMode():
                 if event.key == pygame.K_d:
                     moveRight = False
 
-            pygame.display.update()
-            clock.tick(60)
 
         # Actual movement of player with border constraints
         if moveRight and player.x<WIDTH-player.width:
@@ -265,6 +263,9 @@ def StoryMode():
             player.y += 5
         if moveUp and player.y>0:
             player.y -= 5
+        
+        pygame.display.update()
+        clock.tick(60)
            
 ##### END OF CURRENT MAIN GAME LOOP #####  
 
