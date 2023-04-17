@@ -32,37 +32,43 @@ exit_button2 = Button("Options Menu Exit Button", 295, 500, exit_img, exit_hover
 ##### BATTLE SELECTION DISPLAYSURF BUTTONS #####
 attackImg = pygame.image.load('images/AttackMenuButton.png').convert_alpha()
 attackImgSelected = pygame.image.load('images/AttackMenuButtonSelected.png').convert_alpha()
-AttackButton = Button("Attack", 150, 775, attackImg, attackImgSelected, 1, True)
+AttackButton = Button("Attack", 790, 785, attackImg, attackImgSelected, 1.01, True)
 
 runImg = pygame.image.load('images/RunButton.png').convert_alpha()
 runImgSelected = pygame.image.load('images/RunButtonSelected.png').convert_alpha()
-RunButton = Button("Run", 275, 775, runImg, runImgSelected, 1, False)
+RunButton = Button("Run", 1311, 785, runImg, runImgSelected, 1.01, False)
 
 bagImg = pygame.image.load('images/BagButton.png').convert_alpha()
 bagImgSelected = pygame.image.load('images/BagButtonSelected.png').convert_alpha()
-BagButton = Button("Bag", 375, 775, bagImg, bagImgSelected, 1, False)
+BagButton = Button("Bag", 788, 880, bagImg, bagImgSelected, 1.01, False)
+
+blockImg = pygame.image.load('images/BlockButton.png').convert_alpha()
+blockImgSelected = pygame.image.load('images/BlockButtonSelected.png').convert_alpha()
+BlockButton = Button("Block", 1311, 880, blockImg, blockImgSelected, 1.01, False)
 
 ##### ATTACK MENU BUTTONS #####
 rockImg = pygame.image.load('images/RockButton.png').convert_alpha()
 rockImgSelected = pygame.image.load('images/RockButtonSelected.png').convert_alpha()
-RockButton = Button("Rock", 175, 775, rockImg, rockImgSelected, 1, True)
+RockButton = Button("Rock", 788, 785, rockImg, rockImgSelected, 1.01, True)
 
 paperImg = pygame.image.load('images/PaperButton.png').convert_alpha()
 paperImgSelected = pygame.image.load('images/PaperButtonSelected.png').convert_alpha()
-PaperButton = Button("Paper", 275, 775, paperImg, paperImgSelected, 1, False)
+PaperButton = Button("Paper", 1311, 785, paperImg, paperImgSelected, 1.01, False)
 
 scissorsImg = pygame.image.load('images/ScissorsButton.png').convert_alpha()
 scissorsImgSelected = pygame.image.load('images/ScissorsButtonSelected.png').convert_alpha()
-ScissorsButton = Button("Scissors", 375, 775, scissorsImg, scissorsImgSelected, 1, False)
-
-blockImg = pygame.image.load('images/BlockButton.png').convert_alpha()
-blockImgSelected = pygame.image.load('images/BlockButtonSelected.png').convert_alpha()
-BlockButton = Button("Block", 475, 775, blockImg, blockImgSelected, 1, False)
+ScissorsButton = Button("Scissors", 788, 880, scissorsImg, scissorsImgSelected, 1.01, False)
 
 backImg = pygame.image.load('images/BackBattleButton.png').convert_alpha()
 backImgSelected = pygame.image.load('images/BackBattleButtonSelected.png').convert_alpha()
-BackButton = Button("Back", 575, 775, backImg, backImgSelected, 1, False)
+BackButton = Button("Back", 1309, 880, backImg, backImgSelected, 1.01, False)
 
 ##### IMAGE TO DISPLAY DIALOGUE ON #####
 textBoxImg = pygame.image.load('images/TextBox.png').convert_alpha()
 TextBox = Image(0, 750, textBoxImg, 1)
+
+BattleSelectionMenuBoxImg = pygame.image.load('images/BattleSelectionMenu.png').convert_alpha()
+BattleSelectionMenu = Image(0, 750, BattleSelectionMenuBoxImg, 1)
+
+SpeechBoxImg = pygame.image.load('images/SpeechBox.png').convert_alpha()
+SpeechBox = Image(0, 750, SpeechBoxImg, 1)

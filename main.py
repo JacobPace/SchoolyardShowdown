@@ -271,15 +271,32 @@ def StoryMode():
 
 ##### BOSS RUSH MODE #####
 def BossRush():
+    DISPLAYSURF.fill(white)
+    BattleSelectionMenu.draw(DISPLAYSURF)
+    AttackButton.draw(DISPLAYSURF)
+    RunButton.draw(DISPLAYSURF)
+    BagButton.draw(DISPLAYSURF)
+    BlockButton.draw(DISPLAYSURF)
+    #RockButton.draw(DISPLAYSURF)
+    #PaperButton.draw(DISPLAYSURF)
+    #ScissorsButton.draw(DISPLAYSURF)
+    BackButton.draw(DISPLAYSURF)
+    #while True:
+    #    for event in pygame.event.get():
+    #        if event.type == pygame.QUIT:
+    #            pygame.quit()
+    #            break
+    #    pygame.display.update()
+    #    clock.tick(60)
     Battle(enemyTest)
 
 def Battle(foe):
     DISPLAYSURF.fill(white)
-    TextBox.draw(DISPLAYSURF)
+    #BattleSelectionMenu.draw(DISPLAYSURF)
     playerTest.draw(DISPLAYSURF)
     enemytest.draw(DISPLAYSURF)
     #turn = 0
-    
+    """
     SlowText(enemyLine1, 100, 850) if not enemyLine1.displayed else None
     sleep(2)
     TextBox.draw(DISPLAYSURF)
@@ -289,7 +306,7 @@ def Battle(foe):
     SlowText(enemyLine2, 100, 850) if not enemyLine2.displayed else None
     sleep(2)
     TextBox.draw(DISPLAYSURF)
-    
+    """
     BattleAttackMenu(foe)
     
 def BattleAttackMenu(foe):
@@ -297,8 +314,8 @@ def BattleAttackMenu(foe):
     FoeAction = ""
     FinalResult = ""
     menu = "selection"
-    BattleSelctionButtons = [AttackButton, RunButton, BagButton]
-    AttackButtons = [RockButton, PaperButton, ScissorsButton, BlockButton, BackButton]
+    BattleSelctionButtons = [AttackButton, RunButton, BagButton, BlockButton]
+    AttackButtons = [RockButton, PaperButton, ScissorsButton, BackButton]
     while True:
         PlayerAction = ""
         FoeAction = ""
@@ -313,18 +330,18 @@ def BattleAttackMenu(foe):
             draw_text(victoryAlt, temp_font,black, 100, 850)
 
         if menu == "selection" and foe.health > 0:
-            TextBox.draw(DISPLAYSURF)
+            BattleSelectionMenu.draw(DISPLAYSURF)
             AttackButton.draw(DISPLAYSURF)
             RunButton.draw(DISPLAYSURF)
             BagButton.draw(DISPLAYSURF)
+            BlockButton.draw(DISPLAYSURF)
             pygame.display.update()
 
         if menu == "action" and foe.health > 0:
-            TextBox.draw(DISPLAYSURF)
+            #BattleSelectionMenu.draw(DISPLAYSURF)
             RockButton.draw(DISPLAYSURF)
             PaperButton.draw(DISPLAYSURF)
             ScissorsButton.draw(DISPLAYSURF)
-            BlockButton.draw(DISPLAYSURF)
             BackButton.draw(DISPLAYSURF)
             pygame.display.update()
         for event in pygame.event.get():
@@ -363,19 +380,19 @@ def BattleAttackMenu(foe):
                         PlayerAction = "Rock"
                         FoeAction = foe.action()
                         buttonCooldown = True
-                if event.key == pygame.K_RETURN and PaperButton.selected and menu == "action":
+                if event.key == pygame.K_RETURN and PaperButton.selected and menu == "action" and not buttonCooldown:
                     if PaperButton.action():
                         PlayerAction = "Paper"
                         FoeAction = foe.action()
-                if event.key == pygame.K_RETURN and ScissorsButton.selected and menu == "action":
+                if event.key == pygame.K_RETURN and ScissorsButton.selected and menu == "action" and not buttonCooldown:
                     if ScissorsButton.action():
                         PlayerAction = "Scissors"
                         FoeAction = foe.action()
-                if event.key == pygame.K_RETURN and BlockButton.selected and menu == "action":
+                if event.key == pygame.K_RETURN and BlockButton.selected and menu == "selection" and not buttonCooldown:
                     if BlockButton.action():
                         PlayerAction = "Block"
                         FoeAction = foe.action()
-                if event.key == pygame.K_RETURN and BackButton.selected and menu == "action":
+                if event.key == pygame.K_RETURN and BackButton.selected and menu == "action" and not buttonCooldown:
                     if BackButton.action:
                         menu = "selection"
 
@@ -412,18 +429,16 @@ def BattleAttackMenu(foe):
             print("Bug fixing")
             print(f"Player: {PlayerAction}")
             print(f"Enemy {FoeAction}")
-            TextBox.draw(DISPLAYSURF)
+            SpeechBox.draw(DISPLAYSURF)
             print(FinalResult)
             SlowText2(FinalResult, 100, 850)
             sleep(2)
+            BattleSelectionMenu.draw(DISPLAYSURF)
             menu == "selection"
 
         pygame.display.update()
         clock.tick(60)
     
-        
-        pygame.display.update()
-        clock.tick(60)
 
 def LoseGame():
     pass
