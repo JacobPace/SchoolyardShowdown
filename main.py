@@ -271,26 +271,10 @@ def StoryMode():
 
 ##### BOSS RUSH MODE #####
 def BossRush():
-    DISPLAYSURF.fill(white)
-    BattleSelectionMenu.draw(DISPLAYSURF)
-    AttackButton.draw(DISPLAYSURF)
-    RunButton.draw(DISPLAYSURF)
-    BagButton.draw(DISPLAYSURF)
-    BlockButton.draw(DISPLAYSURF)
-    #RockButton.draw(DISPLAYSURF)
-    #PaperButton.draw(DISPLAYSURF)
-    #ScissorsButton.draw(DISPLAYSURF)
-    BackButton.draw(DISPLAYSURF)
-    #while True:
-    #    for event in pygame.event.get():
-    #        if event.type == pygame.QUIT:
-    #            pygame.quit()
-    #            break
-    #    pygame.display.update()
-    #    clock.tick(60)
-    Battle(enemyTest)
+    Battle(enemyTest, None)
 
-def Battle(foe):
+def Battle(foe, voiceLines):
+    voiceLines = None
     DISPLAYSURF.fill(white)
     #BattleSelectionMenu.draw(DISPLAYSURF)
     playerTest.draw(DISPLAYSURF)
@@ -318,7 +302,7 @@ def BattleAttackMenu(foe):
     AttackButtons = [RockButton, PaperButton, ScissorsButton, BackButton]
     while True:
         PlayerAction = ""
-        FoeAction = ""
+        FoeAction = "."
         FinalResult = ""
 
         if foe.health <= 0:
@@ -338,7 +322,7 @@ def BattleAttackMenu(foe):
             pygame.display.update()
 
         if menu == "action" and foe.health > 0:
-            #BattleSelectionMenu.draw(DISPLAYSURF)
+            BattleSelectionMenu.draw(DISPLAYSURF)
             RockButton.draw(DISPLAYSURF)
             PaperButton.draw(DISPLAYSURF)
             ScissorsButton.draw(DISPLAYSURF)
@@ -398,43 +382,59 @@ def BattleAttackMenu(foe):
 
         if PlayerAction == FoeAction:
             FinalResult = "It's a draw?"
+            BattleDraw.draw(DISPLAYSURF)
+            pygame.display.update()
         elif PlayerAction == "Block":
             FinalResult = "You blocked it!"
+            PlayerBlock.draw(DISPLAYSURF)
+            pygame.display.update()
         elif FoeAction == "Block":
             FinalResult = "They blocked!"
+            EnemyBlock.draw(DISPLAYSURF)
+            pygame.display.update()
 
         elif PlayerAction == "Rock" and FoeAction == "Paper":
             FinalResult = "That hurt!"
+            LostRound.draw(DISPLAYSURF)
+            pygame.display.update()
             player.health -= 1
         elif PlayerAction == "Rock" and FoeAction == "Scissors":
             FinalResult = "That'll show them!"
+            WonRound.draw(DISPLAYSURF)
+            pygame.display.update()
             foe.health -= 1
         
             
         elif PlayerAction == "Paper" and FoeAction == "Scissors":
             FinalResult = "That hurt!"
+            LostRound.draw(DISPLAYSURF)
+            pygame.display.update()
             player.health -= 1
         elif PlayerAction == "Paper" and FoeAction == "Rock":
             FinalResult = "That'll show them!"
+            WonRound.draw(DISPLAYSURF)
+            pygame.display.update()
             foe.health -= 1
 
         elif PlayerAction == "Scissors" and FoeAction == "Rock":
             FinalResult = "That hurt!"
+            LostRound.draw(DISPLAYSURF)
+            pygame.display.update()
             player.health -= 1
         elif PlayerAction == "Scissors" and FoeAction == "Paper":
             FinalResult = "That'll show them!"
+            WonRound.draw(DISPLAYSURF)
+            pygame.display.update()
             foe.health -= 1
 
         if PlayerAction != "":
-            print("Bug fixing")
-            print(f"Player: {PlayerAction}")
-            print(f"Enemy {FoeAction}")
+            sleep(2)
             SpeechBox.draw(DISPLAYSURF)
             print(FinalResult)
             SlowText2(FinalResult, 100, 850)
             sleep(2)
             BattleSelectionMenu.draw(DISPLAYSURF)
-            menu == "selection"
+            menu = "selection"
 
         pygame.display.update()
         clock.tick(60)

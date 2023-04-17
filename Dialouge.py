@@ -9,7 +9,12 @@ playerDialouge = [playerOpeningLine1]
 
 enemyLine1 = Dialouge("OH, you're approaching me?!")
 enemyLine2 = Dialouge("HOHO, then come as close as you like!") 
-enemyTempDialouge = [enemyLine1, enemyLine2]
+
+BossLine1 = "Joel: "
+PlayerLine1BossFight = "PLayer: "
+BosLine2 = "Joel: "
+PlayerLine2BossFight = "Player: "
+
 
 WinRound = Dialouge("Win!")
 LoseRound = Dialouge("Lose!")
@@ -20,3 +25,8 @@ EnemyBlock = Dialouge("They blocked!")
 enemyLoss = Dialouge("Enemy: OH NO!")
 victory = Dialouge("YOU WIN!")
 victoryAlt = "YOU WIN!"
+
+BossRushBattle1 = []
+BossRushBattle2 = []
+BossRushBattle3 = []
+BossRushBoss = []

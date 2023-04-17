@@ -72,3 +72,23 @@ BattleSelectionMenu = Image(0, 750, BattleSelectionMenuBoxImg, 1)
 
 SpeechBoxImg = pygame.image.load('images/SpeechBox.png').convert_alpha()
 SpeechBox = Image(0, 750, SpeechBoxImg, 1)
+
+BattleDrawImg = pygame.image.load('images/BattleDraw.png').convert_alpha()
+BattleDraw = Image(190, 828, BattleDrawImg, 1)
+
+LostBattleImg = pygame.image.load('images/PlayerBattleLost.png').convert_alpha()
+LostBattle = Image(190, 828, LostBattleImg, 1)
+
+WonBattleImg = pygame.image.load('images/PlayerBattleWon.png').convert_alpha()
+WonBattle = Image(190, 828, WonBattleImg, 1)
+
+WonRoundImg = pygame.image.load('images/PlayerRoundWon.png').convert_alpha()
+WonRound = Image(190, 828, WonRoundImg, 1)
+
+LostRoundImg = pygame.image.load('images/PlayerRoundLost.png').convert_alpha()
+LostRound = Image(190, 828, LostRoundImg, 1)
+
+PlayerBlockedImg = pygame.image.load('images/PlayerBlocked.png').convert_alpha()
+PlayerBlock = Image(190, 828, PlayerBlockedImg, 1)
+
+EnemyBlockedImg = pygame.image.load('images/EnemyBlocked.png').convert_alpha()

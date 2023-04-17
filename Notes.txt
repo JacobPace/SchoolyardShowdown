@@ -1,0 +1,9 @@
+Notes:
+
+190x78 = topleft
+703x172 = bottomRight
+
+94 tall
+513 tall
+
+image location = 190x828
