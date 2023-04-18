@@ -280,7 +280,7 @@ def Battle(foe, voiceLines):
     playerTest.draw(DISPLAYSURF)
     enemytest.draw(DISPLAYSURF)
     #turn = 0
-    """
+    
     SlowText(enemyLine1, 100, 850) if not enemyLine1.displayed else None
     sleep(2)
     TextBox.draw(DISPLAYSURF)
@@ -290,7 +290,7 @@ def Battle(foe, voiceLines):
     SlowText(enemyLine2, 100, 850) if not enemyLine2.displayed else None
     sleep(2)
     TextBox.draw(DISPLAYSURF)
-    """
+    
     BattleAttackMenu(foe)
     
 def BattleAttackMenu(foe):
@@ -308,7 +308,7 @@ def BattleAttackMenu(foe):
         if foe.health <= 0:
             TextBox.draw(DISPLAYSURF)
             SlowText(enemyLoss, 100, 850) if not enemyLoss.displayed else None
-            sleep(1)
+            sleep(3)
             TextBox.draw(DISPLAYSURF)
             SlowText(victory, 100, 850) if not victory.displayed else None
             draw_text(victoryAlt, temp_font,black, 100, 850)
@@ -349,9 +349,6 @@ def BattleAttackMenu(foe):
                 if event.key == pygame.K_RETURN and AttackButton.selected and menu == "selection":
                     if AttackButton.action():
                         menu = "action"
-
-                #if event.key == pygame.K_RETURN and AttackButton.selected and menu == "action":
-                #    menu = "selection"
                     buttonCooldown = True
                 if event.key in menuCycleRightDown and not buttonCooldown and menu == "action":
                     ChangingButtons(AttackButtons, 1)
@@ -385,12 +382,23 @@ def BattleAttackMenu(foe):
             BattleDraw.draw(DISPLAYSURF)
             pygame.display.update()
         elif PlayerAction == "Block":
-            FinalResult = "You blocked it!"
-            PlayerBlock.draw(DISPLAYSURF)
+            blockChance = randint(1, 10)
+            if blockChance > 0 and blockChance < 6:
+                FinalResult = "You blocked it!"
+                PlayerBlock.draw(DISPLAYSURF)
+            elif blockChance > 5 and blockChance < 11:
+                FinalResult = "Your Block Failed!"
+                PlayerBlockFailed.draw(DISPLAYSURF)
+                pygame.display.update()
+                sleep(2)
+                BlankResult.draw(DISPLAYSURF)
+                sleep(2)
+                pygame.display.update()
+                LostRound.draw(DISPLAYSURF)
             pygame.display.update()
         elif FoeAction == "Block":
             FinalResult = "They blocked!"
-            EnemyBlock.draw(DISPLAYSURF)
+            EnemyBlocked.draw(DISPLAYSURF)
             pygame.display.update()
 
         elif PlayerAction == "Rock" and FoeAction == "Paper":

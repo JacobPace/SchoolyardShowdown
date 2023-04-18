@@ -92,3 +92,10 @@ PlayerBlockedImg = pygame.image.load('images/PlayerBlocked.png').convert_alpha()
 PlayerBlock = Image(190, 828, PlayerBlockedImg, 1)
 
 EnemyBlockedImg = pygame.image.load('images/EnemyBlocked.png').convert_alpha()
+EnemyBlocked = Image(190, 828, EnemyBlockedImg, 1)
+
+PlayerBlockedFailedImg = pygame.image.load('images/BlockFailed.png').convert_alpha()
+PlayerBlockFailed = Image(190, 828, PlayerBlockedFailedImg, 1)
+
+BlankResultImg = pygame.image.load('images/Blank.png').convert_alpha()
+BlankResult = Image(190, 828, BlankResultImg, 1)
