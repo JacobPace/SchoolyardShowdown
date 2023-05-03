@@ -15,7 +15,6 @@ PlayerLine1BossFight = "PLayer: "
 BosLine2 = "Joel: "
 PlayerLine2BossFight = "Player: "
 
-
 WinRound = Dialouge("Win!")
 LoseRound = Dialouge("Lose!")
 DrawRound = Dialouge("It's a Draw?")
