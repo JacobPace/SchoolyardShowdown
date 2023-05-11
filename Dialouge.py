@@ -3,7 +3,7 @@ class Dialouge:
     def __init__(self, text):
         self.text = text
         self.displayed = False
-
+#need a change to commit nahudjkawbksjBDkjsAJKDASJ
 playerOpeningLine1 = Dialouge("I can't win unless I get closer")
 playerDialouge = [playerOpeningLine1]
 
