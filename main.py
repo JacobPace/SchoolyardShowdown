@@ -7,6 +7,7 @@ from Dialouge import *
 import sys
 from random import randint
 from Constants import *
+from Controller import *
 pygame.init()
 
 # set some global variables
@@ -47,7 +48,7 @@ def SlowText(string, x, y):
         text_rect.topleft = (x, y)
         DISPLAYSURF.blit(text_surface, text_rect)
         pygame.display.update()
-        pygame.time.wait(50)
+        pygame.time.wait(5)
     string.displayed = True
 
 # Print text slowly not from the dialouge class
@@ -60,7 +61,7 @@ def SlowText2(string, x, y):
         text_rect.topleft = (x, y)
         DISPLAYSURF.blit(text_surface, text_rect)
         pygame.display.update()
-        pygame.time.wait(50)
+        pygame.time.wait(5)
 
 # Function to dynamically change the buttons in menus
 def ChangingButtons(buttons, integral):
@@ -96,6 +97,7 @@ def Quit():
 
 ##### START MENU #####
 def StartMenu():
+    buttonCooldown = False
     buttons = [start_button, exit_button, options_button]
     scroll = 0
     while True:
@@ -117,6 +119,7 @@ def StartMenu():
             if event.type == pygame.QUIT:
                 Quit()
         
+        #need a change for the repo
             if event.type == pygame.KEYDOWN:
                 buttonCooldown = False
                 if event.key == pygame.K_ESCAPE:
@@ -135,13 +138,39 @@ def StartMenu():
                     if start_button.action():
                         buttonCooldown = True
                         DISPLAYSURF.fill(white)
-                        Intro()
+                        #Intro()
+                        Finale()
                 if event.key == pygame.K_RETURN and exit_button.selected:
                     if exit_button.action():
                         Quit()
                 if event.key == pygame.K_RETURN and options_button.selected:
                     DISPLAYSURF.fill((0,255,255))
                     OptionsMenu()
+        ##### Controller Input
+        if (GPIO.input(UpButton) == GPIO.HIGH) and not buttonCooldown:
+            buttonCooldown = True
+            ChangingButtons(buttons, 1)
+            #pygame.time.delay(500)
+        if (GPIO.input(DownButton) == GPIO.HIGH) and not buttonCooldown:
+            buttonCooldown = True
+            ChangingButtons(buttons, -1)
+            #pygame.time.delay(500)
+        if (GPIO.input(UpButton) == GPIO.LOW) and buttonCooldown:
+            buttonCooldown = False
+        if (GPIO.input(DownButton) == GPIO.LOW) and buttonCooldown:
+            buttonCooldown = False
+        ##### Controller Select Buttons
+        if (GPIO.input(SelectButton) == GPIO.HIGH) and start_button.selected:
+            DISPLAYSURF.fill(white)
+            Intro()
+        if (GPIO.input(SelectButton) == GPIO.HIGH) and exit_button.selected:
+            #DISPLAYSURF.fill(white)
+            #Quit()
+            pass
+        if (GPIO.input(SelectButton) == GPIO.HIGH) and options_button.selected:
+            DISPLAYSURF.fill((0,255,255))
+            OptionsMenu()
+        
 
         pygame.display.update()
 
@@ -149,6 +178,7 @@ def StartMenu():
 
 ##### OPTIONS MENU #####
 def OptionsMenu():
+    buttonCooldown = False
     optionsButtons = [exit_button2, back_button]
     while True:
         back_button.draw(DISPLAYSURF)
@@ -177,6 +207,27 @@ def OptionsMenu():
                 if event.key == pygame.K_RETURN and exit_button2.selected:
                     if exit_button2.action():
                         Quit()
+        ##### Controller Input
+        if (GPIO.input(UpButton) == GPIO.HIGH) and not buttonCooldown:
+            buttonCooldown = True
+            ChangingButtons(optionsButtons, 1)
+            pygame.time.delay(500)
+        if (GPIO.input(DownButton) == GPIO.HIGH) and not buttonCooldown:
+            buttonCooldown = True
+            ChangingButtons(optionsButtons, -1)
+            pygame.time.delay(500)
+        if (GPIO.input(UpButton) == GPIO.LOW) and buttonCooldown:
+            buttonCooldown = False
+        if (GPIO.input(DownButton) == GPIO.LOW) and buttonCooldown:
+            buttonCooldown = False
+        ##### Controller Select Buttons
+        if (GPIO.input(SelectButton) == GPIO.HIGH) and back_button.selected:
+            StartMenu()
+        if (GPIO.input(SelectButton) == GPIO.HIGH) and exit_button2.selected:
+            #DISPLAYSURF.fill(white)
+            #Quit()
+            pass
+        
         pygame.display.update()
         clock.tick(60)
 ##### END OF CURRENT OPTIONS MENU CODE #####
@@ -256,10 +307,11 @@ def StoryMode():
         clock.tick(60)
 
 def Intro():
+    buttonCooldown = False
     DISPLAYSURF.fill(white)
     PlayerIdle.draw(DISPLAYSURF)
     SpeechBox.draw(DISPLAYSURF)
-    SlowText2(Lore01, 100, 800)
+    SlowText2(Lore01, 100, 675)
     iteration = 0
     while True:
         for event in pygame.event.get():
@@ -270,53 +322,57 @@ def Intro():
                     Quit()
                 if event.key != pygame.K_ESCAPE:
                     iteration += 1
+        ##### Controller Input
+        if (GPIO.input(UpButton) == GPIO.HIGH) or (GPIO.input(DownButton) == GPIO.HIGH) or (GPIO.input(SelectButton) == GPIO.HIGH):
+            iteration += 1
+        # Move through text
         if iteration == 1:
             SpeechBox.draw(DISPLAYSURF)
-            SlowText(Lore0, 100, 800) if not Lore0.displayed else draw_text(Lore0.text, temp_font, black, 100, 800)
+            SlowText(Lore0, 100, 675) if not Lore0.displayed else draw_text(Lore0.text, temp_font, black, 100, 675)
         if iteration == 2:
             JoelIdle.draw(DISPLAYSURF)
             SpeechBox.draw(DISPLAYSURF)
-            SlowText(Lore1, 100, 800) if not Lore1.displayed else draw_text(Lore1.text, temp_font, black, 100, 800)
+            SlowText(Lore1, 100, 675) if not Lore1.displayed else draw_text(Lore1.text, temp_font, black, 100, 675)
         if iteration == 3:
             DISPLAYSURF.fill(black)
             SpeechBox.draw(DISPLAYSURF)
-            SlowText(Lore2, 100, 800) if not Lore2.displayed else draw_text(Lore2.text, temp_font, black, 100, 800)
+            SlowText(Lore2, 100, 675) if not Lore2.displayed else draw_text(Lore2.text, temp_font, black, 100, 675)
         if iteration == 4:
             SpeechBox.draw(DISPLAYSURF)
-            SlowText(Lore3, 100, 800) if not Lore3.displayed else draw_text(Lore3.text, temp_font, black, 100, 800)
+            SlowText(Lore3, 100, 675) if not Lore3.displayed else draw_text(Lore3.text, temp_font, black, 100, 675)
         if iteration == 5:
             DISPLAYSURF.fill(white)
             PlayerIdle.draw(DISPLAYSURF)
             JoelIdle.draw(DISPLAYSURF)
             SpeechBox.draw(DISPLAYSURF)
-            SlowText(Lore4, 100, 800) if not Lore4.displayed else draw_text(Lore4.text, temp_font, black, 100, 800)
+            SlowText(Lore4, 100, 675) if not Lore4.displayed else draw_text(Lore4.text, temp_font, black, 100, 675)
         if iteration == 6:
             SpeechBox.draw(DISPLAYSURF)
-            SlowText(Lore5, 100, 800) if not Lore5.displayed else draw_text(Lore5.text, temp_font, black, 100, 800)
+            SlowText(Lore5, 100, 675) if not Lore5.displayed else draw_text(Lore5.text, temp_font, black, 100, 675)
         if iteration == 7:
             DwayneIntro.draw(DISPLAYSURF)
             AidenIntro.draw(DISPLAYSURF)
             FredIntro.draw(DISPLAYSURF)
             SpeechBox.draw(DISPLAYSURF)
-            SlowText(Lore6, 100, 800) if not Lore6.displayed else draw_text(Lore6.text, temp_font, black, 100, 800)
+            SlowText(Lore6, 100, 675) if not Lore6.displayed else draw_text(Lore6.text, temp_font, black, 100, 675)
         if iteration == 8:
             SpeechBox.draw(DISPLAYSURF)
-            SlowText(Lore7, 100, 800) if not Lore7.displayed else draw_text(Lore7.text, temp_font, black, 100, 800)
+            SlowText(Lore7, 100, 675) if not Lore7.displayed else draw_text(Lore7.text, temp_font, black, 100, 675)
         if iteration == 9:
             SpeechBox.draw(DISPLAYSURF)
-            SlowText(Lore8, 100, 800) if not Lore8.displayed else draw_text(Lore8.text, temp_font, black, 100, 800)
+            SlowText(Lore8, 100, 675) if not Lore8.displayed else draw_text(Lore8.text, temp_font, black, 100, 675)
         if iteration == 10:
             SpeechBox.draw(DISPLAYSURF)
-            SlowText(Lore9, 100, 800) if not Lore9.displayed else draw_text(Lore9.text, temp_font, black, 100, 800)
+            SlowText(Lore9, 100, 675) if not Lore9.displayed else draw_text(Lore9.text, temp_font, black, 100, 675)
         if iteration == 11:
             SpeechBox.draw(DISPLAYSURF)
-            SlowText(Lore10, 100, 800) if not Lore10.displayed else draw_text(Lore10.text, temp_font, black, 100, 800)
+            SlowText(Lore10, 100, 675) if not Lore10.displayed else draw_text(Lore10.text, temp_font, black, 100, 675)
         if iteration == 12:
             SpeechBox.draw(DISPLAYSURF)
-            SlowText(Lore11, 100, 800) if not Lore11.displayed else draw_text(Lore11.text, temp_font, black, 100, 800)
+            SlowText(Lore11, 100, 675) if not Lore11.displayed else draw_text(Lore11.text, temp_font, black, 100, 675)
         if iteration == 13:
             SpeechBox.draw(DISPLAYSURF)
-            SlowText(Lore12, 100, 800) if not Lore12.displayed else draw_text(Lore12.text, temp_font, black, 100, 800)
+            SlowText(Lore12, 100, 675) if not Lore12.displayed else draw_text(Lore12.text, temp_font, black, 100, 675)
         if iteration == 14:
             break
         clock.tick(60)
@@ -326,11 +382,12 @@ def Intro():
 ##### BOSS RUSH MODE #####
 def BossRush():
     cont = 0
+    buttonCooldown = False
     DISPLAYSURF.fill(white)
     DwayneIdle.draw(DISPLAYSURF)
     PlayerIdle.draw(DISPLAYSURF)
     SpeechBox.draw(DISPLAYSURF)
-    SlowText2(DwayneOpen0, 100, 800)
+    SlowText2(DwayneOpen0, 100, 675)
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -340,9 +397,12 @@ def BossRush():
                     Quit()
                 if event.key != pygame.K_ESCAPE:
                     cont += 1
+        ##### Controller Input
+        if (GPIO.input(UpButton) == GPIO.HIGH) or (GPIO.input(DownButton) == GPIO.HIGH) or (GPIO.input(SelectButton) == GPIO.HIGH):
+            cont += 1
         if cont == 1:
             SpeechBox.draw(DISPLAYSURF)
-            SlowText(DwayneOpen1, 100, 800) if not DwayneOpen1.displayed else draw_text(DwayneOpen1.text, temp_font, black, 100, 800)
+            SlowText(DwayneOpen1, 100, 675) if not DwayneOpen1.displayed else draw_text(DwayneOpen1.text, temp_font, black, 100, 675)
         if cont == 2:
             break
         clock.tick(60)
@@ -350,12 +410,13 @@ def BossRush():
     Battle(Dwayne, DwayneBattleScript, DwayneIdle, DwayneThrow, DwayneHurt, DwayneBlock, DwayneRock, DwaynePaper, DwayneScissors)
 
 def Level2():
+    buttonCooldown = False
     cont = 0
     DISPLAYSURF.fill(white)
     AidenIdle.draw(DISPLAYSURF)
     PlayerIdle.draw(DISPLAYSURF)
     SpeechBox.draw(DISPLAYSURF)
-    SlowText2(AidenOpen0, 100, 800)
+    SlowText2(AidenOpen0, 100, 675)
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -365,9 +426,12 @@ def Level2():
                     Quit()
                 if event.key != pygame.K_ESCAPE:
                     cont += 1
+        ##### Controller Input
+        if (GPIO.input(UpButton) == GPIO.HIGH) or (GPIO.input(DownButton) == GPIO.HIGH) or (GPIO.input(SelectButton) == GPIO.HIGH):
+            cont += 1
         if cont == 1:
             SpeechBox.draw(DISPLAYSURF)
-            SlowText(AidenOpen1, 100, 800) if not AidenOpen1.displayed else draw_text(AidenOpen1.text, temp_font, black, 100, 800)
+            SlowText(AidenOpen1, 100, 675) if not AidenOpen1.displayed else draw_text(AidenOpen1.text, temp_font, black, 100, 675)
         if cont == 2:
             break
         clock.tick(60)
@@ -375,12 +439,13 @@ def Level2():
     Battle(Aiden, AidenBattleScript, AidenIdle, AidenThrow, AidenHurt, AidenBlock, AidenRock, AidenPaper, AidenScissors)
 
 def Level3():
+    buttonCooldown = False
     cont = 0
     DISPLAYSURF.fill(white)
     FredIdle.draw(DISPLAYSURF)
     PlayerIdle.draw(DISPLAYSURF)
     SpeechBox.draw(DISPLAYSURF)
-    SlowText2(FredOpen0, 100, 800)
+    SlowText2(FredOpen0, 100, 675)
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -390,12 +455,15 @@ def Level3():
                     Quit()
                 if event.key != pygame.K_ESCAPE:
                     cont += 1
+        ##### Controller Input
+        if (GPIO.input(UpButton) == GPIO.HIGH) or (GPIO.input(DownButton) == GPIO.HIGH) or (GPIO.input(SelectButton) == GPIO.HIGH):
+            cont += 1
         if cont == 1:
             SpeechBox.draw(DISPLAYSURF)
-            SlowText(FredOpen1, 100, 800) if not FredOpen1.displayed else draw_text(FredOpen1.text, temp_font, black, 100, 800)
+            SlowText(FredOpen1, 100, 675) if not FredOpen1.displayed else draw_text(FredOpen1.text, temp_font, black, 100, 675)
         if cont == 2:
             SpeechBox.draw(DISPLAYSURF)
-            SlowText(FredOpen2, 100, 800) if not FredOpen2.displayed else draw_text(FredOpen2.text, temp_font, black, 100, 800)
+            SlowText(FredOpen2, 100, 675) if not FredOpen2.displayed else draw_text(FredOpen2.text, temp_font, black, 100, 675)
         if cont == 3:
             break
         clock.tick(60)
@@ -403,12 +471,13 @@ def Level3():
     Battle(Fred, FredBattleScript, FredIdle, FredThrow, FredHurt, FredBlock, FredRock, FredPaper, FredScissors)
 
 def BossFight():
+    buttonCooldown = False
     cont = 0
     DISPLAYSURF.fill(white)
     JoelIdle.draw(DISPLAYSURF)
     PlayerIdle.draw(DISPLAYSURF)
     SpeechBox.draw(DISPLAYSURF)
-    SlowText2(JoelOpen0, 100, 800)
+    SlowText2(JoelOpen0, 100, 675)
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -418,12 +487,15 @@ def BossFight():
                     Quit()
                 if event.key != pygame.K_ESCAPE:
                     cont += 1
+        ##### Controller Input
+        if (GPIO.input(UpButton) == GPIO.HIGH) or (GPIO.input(DownButton) == GPIO.HIGH) or (GPIO.input(SelectButton) == GPIO.HIGH):
+            cont += 1
         if cont == 1:
             SpeechBox.draw(DISPLAYSURF)
-            SlowText(JoelOpen1, 100, 800) if not JoelOpen1.displayed else draw_text(JoelOpen1.text, temp_font, black, 100, 800)
+            SlowText(JoelOpen1, 100, 675) if not JoelOpen1.displayed else draw_text(JoelOpen1.text, temp_font, black, 100, 675)
         if cont == 2:
             SpeechBox.draw(DISPLAYSURF)
-            SlowText(JoelOpen2, 100, 800) if not JoelOpen2.displayed else draw_text(JoelOpen2.text, temp_font, black, 100, 800)
+            SlowText(JoelOpen2, 100, 675) if not JoelOpen2.displayed else draw_text(JoelOpen2.text, temp_font, black, 100, 675)
         if cont == 3:
             break
         clock.tick(60)
@@ -431,18 +503,20 @@ def BossFight():
     Battle(Joel, JoelBattleScript, JoelIdle, JoelThrow, JoelHurt, JoelBlock, JoelRock, JoelPaper, JoelScissors)
 
 def Battle(foe, script, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors):
+    buttonCooldown = False
     DISPLAYSURF.fill(white)
     PlayerIdle.draw(DISPLAYSURF)
     FoeIdle.draw(DISPLAYSURF)
     GruntHealthBar3.draw(DISPLAYSURF) if foe.type != "boss" else None
     BossHealthBar5.draw(DISPLAYSURF) if foe.type == "boss" else None
     PlayerHealthBarFull.draw(DISPLAYSURF)
-    draw_text(foe.name, temp_font, black, 1125, 70)
-    draw_text("Player", temp_font, black, 425, 320)
+    draw_text(foe.name, temp_font, black, 1000, 70)
+    draw_text("Player", temp_font, black, 325, 320)
     pygame.display.update()
     BattleSelectMenu(foe, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors, script)
 
 def ThrowHands(PlayerAction, FoeAction, pBlock, fBlock, draw, playerWon, enemyWon, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors, script):
+    buttonCooldown = False
     for i in range(0, 3):
         ##### ITERATION #####
         DISPLAYSURF.fill(white)
@@ -535,19 +609,19 @@ def ThrowHands(PlayerAction, FoeAction, pBlock, fBlock, draw, playerWon, enemyWo
     SpeechBox.draw(DISPLAYSURF)
     FoeIdle.draw(DISPLAYSURF)
     if draw:
-        SlowText2(script[0], 100, 800)
+        SlowText2(script[0], 100, 675)
     elif PlayerAction == "Block":
         if pBlock:
-            SlowText2(script[randint(4, 6)], 100, 800)
+            SlowText2(script[randint(4, 6)], 100, 675)
         elif not pBlock:
-            SlowText2(script[randint(1, 3)], 100, 800)
+            SlowText2(script[randint(1, 3)], 100, 675)
     elif fBlock:
-        SlowText2(script[7], 100, 800)
+        SlowText2(script[7], 100, 675)
     elif not draw and PlayerAction != "Block" and not fBlock:
         if playerWon:
-            SlowText2(script[randint(4, 6)], 100, 800)
+            SlowText2(script[randint(4, 6)], 100, 675)
         if enemyWon:
-            SlowText2(script[randint(1, 3)], 100, 800)
+            SlowText2(script[randint(1, 3)], 100, 675)
     count = 0
     while True:
         for event in pygame.event.get():
@@ -558,12 +632,16 @@ def ThrowHands(PlayerAction, FoeAction, pBlock, fBlock, draw, playerWon, enemyWo
                     Quit()
                 if event.key != pygame.K_ESCAPE:
                     count += 1
+        ##### Controller Input
+        if (GPIO.input(UpButton) == GPIO.HIGH) or (GPIO.input(DownButton) == GPIO.HIGH) or (GPIO.input(SelectButton) == GPIO.HIGH):
+            count += 1
         if count == 1:
             break
         clock.tick(60)
         pygame.display.update()
             
 def HealedResult(foe, FoeAction, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors, script):
+    buttonCooldown = False
     if player.health + 3 > 7:
         player.health = 7
     else:
@@ -600,12 +678,16 @@ def HealedResult(foe, FoeAction, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, 
                     Quit()
                 if event.key != pygame.K_ESCAPE:
                     count += 1
+        ##### Controller Input
+        if (GPIO.input(UpButton) == GPIO.HIGH) or (GPIO.input(DownButton) == GPIO.HIGH) or (GPIO.input(SelectButton) == GPIO.HIGH):
+            count += 1
         if count == 1:
             BattleSelectMenu(foe, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors, script)
         clock.tick(60)
         pygame.display.update()
 
 def BattleSelectMenu(foe, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors, script):
+    buttonCooldown = False
     DISPLAYSURF.fill(white)
     PlayerIdle.draw(DISPLAYSURF)
     FoeIdle.draw(DISPLAYSURF)
@@ -621,8 +703,8 @@ def BattleSelectMenu(foe, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePape
     BossHealthBar[foe.health].draw(DISPLAYSURF) if foe.type == "boss" else None
     GruntHealthBar[foe.health].draw(DISPLAYSURF) if foe.type != "boss" else None
     PlayerHealthBar[player.health].draw(DISPLAYSURF)
-    draw_text(foe.name, temp_font, black, 1125, 70)
-    draw_text("Player", temp_font, black, 425, 320)
+    draw_text(foe.name, temp_font, black, 1000, 70)
+    draw_text("Player", temp_font, black, 325, 220)
     pygame.display.update()
     while True:
         BattleSelectionMenu3.draw(DISPLAYSURF)
@@ -630,7 +712,7 @@ def BattleSelectMenu(foe, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePape
         BagButton.draw(DISPLAYSURF)
         BlockButton.draw(DISPLAYSURF)
         draw_text(foe.name, temp_font, black, 1125, 70)
-        draw_text("Player", temp_font, black, 425, 320)
+        draw_text("Player", temp_font, black, 325, 220)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 Quit()
@@ -654,45 +736,69 @@ def BattleSelectMenu(foe, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePape
                 if event.key == pygame.K_RETURN and not buttonCooldown and BagButton.selected:
                     if BagButton.action:
                         BattleBagMenu(foe, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors, script)
+        ##### Controller Input
+        if (GPIO.input(UpButton) == GPIO.HIGH) and not buttonCooldown:
+            buttonCooldown = True
+            ChangingButtons(SelectMenuButtons, 1)
+            pygame.time.delay(500)
+        if (GPIO.input(DownButton) == GPIO.HIGH) and not buttonCooldown:
+            buttonCooldown = True
+            ChangingButtons(SelectMenuButtons, -1)
+            pygame.time.delay(500)
+        if (GPIO.input(UpButton) == GPIO.LOW) and buttonCooldown:
+            buttonCooldown = False
+        if (GPIO.input(DownButton) == GPIO.LOW) and buttonCooldown:
+            buttonCooldown = False
+        ##### Controller Select Buttons
+        if (GPIO.input(SelectButton) == GPIO.HIGH) and AttackButton.selected:
+            BattleAttackMenu(foe, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors, script)
+        if (GPIO.input(SelectButton) == GPIO.HIGH) and BlockButton.selected:
+            PlayerAction = "Block"
+            FoeAction = foe.action()
+            RoundResults(foe, PlayerAction, FoeAction, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors, script)
+        if (GPIO.input(SelectButton) == GPIO.HIGH) and BagButton.selected:
+            BattleBagMenu(foe, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors, script)
 
-            if foe.type != "boss":
-                GruntHealthBar[foe.health].draw(DISPLAYSURF)
-                if foe.health == 0:
-                    if foe.name == "Dwayne":
-                        SpeechBox.draw(DISPLAYSURF)
-                        SlowText2(DwayneLoseBattle, 100, 800)
-                        pygame.time.delay(2000)
-                        Level2()
-                    if foe.name == "Aiden":
-                        SpeechBox.draw(DISPLAYSURF)
-                        SlowText2(AidenLoseBattle, 100, 800)
-                        pygame.time.delay(2000)
-                        Level3()
-                    if foe.name == "Fred":
-                        SpeechBox.draw(DISPLAYSURF)
-                        SlowText2(FredLoseBattle, 100, 800)
-                        pygame.time.delay(2000)
-                        BossFight()
-            if foe.type == "boss":
-                BossHealthBar[foe.health].draw(DISPLAYSURF)
-                if foe.health == 1:
-                    Phase2(foe, turn)
-            if player.health == 0:
+        if foe.type != "boss":
+            GruntHealthBar[foe.health].draw(DISPLAYSURF)
+            if foe.health == 0:
                 if foe.name == "Dwayne":
-                    LoseGame(DwayenWinBattle)
+                    SpeechBox.draw(DISPLAYSURF)
+                    SlowText2(DwayneLoseBattle, 100, 675)
+                    pygame.time.delay(2000)
+                    Level2()
                 if foe.name == "Aiden":
-                    LoseGame(AidenWinBattle)
+                    SpeechBox.draw(DISPLAYSURF)
+                    SlowText2(AidenLoseBattle, 100, 675)
+                    pygame.time.delay(2000)
+                    Level3()
                 if foe.name == "Fred":
-                    LoseGame(FredWinBattle)
-                if foe.name == "Joel":
-                    LoseGame(JoelWinBattle)
-            PlayerHealthBar[player.health].draw(DISPLAYSURF)
-            draw_text(foe.name, temp_font, black, 1125, 70)
-            draw_text("Player", temp_font, black, 425, 320)
-            clock.tick(60)
-            pygame.display.update()
+                    SpeechBox.draw(DISPLAYSURF)
+                    SlowText2(FredLoseBattle, 100, 675)
+                    pygame.time.delay(2000)
+                    BossFight()
+        if foe.type == "boss":
+            BossHealthBar[foe.health].draw(DISPLAYSURF)
+            if foe.health == 1:
+                Phase2(foe, turn)
+        if player.health == 0:
+            if foe.name == "Dwayne":
+                LoseGame(DwayenWinBattle)
+            if foe.name == "Aiden":
+                LoseGame(AidenWinBattle)
+            if foe.name == "Fred":
+                LoseGame(FredWinBattle)
+            if foe.name == "Joel":
+                LoseGame(JoelWinBattle)
+        PlayerHealthBar[player.health].draw(DISPLAYSURF)
+        draw_text(foe.name, temp_font, black, 1125, 70)
+        draw_text("Player", temp_font, black, 325, 220)
+        clock.tick(60)
+        pygame.display.update()
 
 def BattleBagMenu(foe, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors, script):
+    pygame.time.delay(500)
+    buttonCooldown = FalsebuttonCooldown = False
     BagButtons = [BandAid, BagMenuBackButton]
     BandAidImg = [BandAid0Img, BandAid1Img, BandAid2Img, BandAid3Img, BandAid4Img, BandAid5Img]
     BandAidImgSelected = [BandAid0ImgSelected, BandAid1ImgSelected, BandAid2ImgSelected, BandAid3ImgSelected, BandAid4ImgSelected, BandAid5ImgSelected]
@@ -719,16 +825,42 @@ def BattleBagMenu(foe, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, 
                 if event.key == pygame.K_RETURN and not buttonCooldown and BandAid.selected:
                     if player.health == 7:
                         SpeechBox.draw(DISPLAYSURF)
+                        SlowText2("There's no point, you are at full HP.", 100, 675)
 
                     elif BandAid.action():
                         FoeAction = foe.action
                         HealedResult(foe, FoeAction, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors, script)
+        ##### Controller Input
+        if (GPIO.input(UpButton) == GPIO.HIGH) and not buttonCooldown:
+            buttonCooldown = True
+            ChangingButtons(BagButtons, 1)
+            pygame.time.delay(500)
+        if (GPIO.input(DownButton) == GPIO.HIGH) and not buttonCooldown:
+            buttonCooldown = True
+            ChangingButtons(BagButtons, -1)
+            pygame.time.delay(500)
+        if (GPIO.input(UpButton) == GPIO.LOW) and buttonCooldown:
+            buttonCooldown = False
+        if (GPIO.input(DownButton) == GPIO.LOW) and buttonCooldown:
+            buttonCooldown = False
+        ##### Controller Select Buttons
+        if (GPIO.input(SelectButton) == GPIO.HIGH) and BandAid.selected:
+            if player.health == 7:
+                SpeechBox.draw(DISPLAYSURF)
+                SlowText2("There's no point, you are at full HP.", 100, 675)
+
+            elif BandAid.action():
+                FoeAction = foe.action
+                HealedResult(foe, FoeAction, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors, script)
+        if (GPIO.input(SelectButton) == GPIO.HIGH) and BagMenuBackButton.selected:
+            BattleSelectMenu(foe, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors, script)
         BandAid.image = BandAidImg[player.bandAids]
         BandAid.imgHover = BandAidImgSelected[player.bandAids]
         clock.tick(60)
         pygame.display.update()
         
 def BattleAttackMenu(foe, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors, script):
+    buttonCooldown = False
     PlayerAction = ""
     FoeAction = ""
     #FinalResult = ""
@@ -779,10 +911,49 @@ def BattleAttackMenu(foe, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePape
                     if BackButton.action:
                         pygame.time.delay(500)
                         BattleSelectMenu(foe, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors, script)
+        ##### Controller Input
+        if (GPIO.input(UpButton) == GPIO.HIGH) and not buttonCooldown:
+            buttonCooldown = True
+            ChangingButtons(AttackButtons, 1)
+            pygame.time.delay(500)
+        if (GPIO.input(DownButton) == GPIO.HIGH) and not buttonCooldown:
+            buttonCooldown = True
+            ChangingButtons(AttackButtons, -1)
+            pygame.time.delay(500)
+        if (GPIO.input(UpButton) == GPIO.LOW) and buttonCooldown:
+            buttonCooldown = False
+        if (GPIO.input(DownButton) == GPIO.LOW) and buttonCooldown:
+            buttonCooldown = False
+        ##### Controller Select Buttons
+        if (GPIO.input(SelectButton) == GPIO.HIGH) and RockButton.selected:
+            PlayerAction = "Rock"
+            FoeAction = foe.action()
+            RoundResults(foe, PlayerAction, FoeAction, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors, script)
+            pygame.time.delay(500)
+           
+        if (GPIO.input(SelectButton) == GPIO.HIGH) and PaperButton.selected:
+            PlayerAction = "Paper"
+            FoeAction = foe.action()
+            RoundResults(foe, PlayerAction, FoeAction, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors, script)
+            pygame.time.delay(500)
+            BattleSelectMenu(foe, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors, script)
+
+        if (GPIO.input(SelectButton) == GPIO.HIGH) and ScissorsButton.selected:
+            PlayerAction = "Scissors"
+            FoeAction = foe.action()
+            RoundResults(foe, PlayerAction, FoeAction, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors, script)
+            pygame.time.delay(500)
+            BattleSelectMenu(foe, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors, script)
+
+        if (GPIO.input(SelectButton) == GPIO.HIGH) and BackButton.selected:
+            pygame.time.delay(500)
+            BattleSelectMenu(foe, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors, script)
+        
         pygame.display.update()
         clock.tick(60)
 
 def RoundResults(foe, PlayerAction, FoeAction, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors, script):
+    buttonCooldown = False
     if PlayerAction == "Heal":
         HealedResult(FoeAction)
         pygame.display.update()
@@ -834,14 +1005,15 @@ def RoundResults(foe, PlayerAction, FoeAction, FoeIdle, FoeThrow, FoeHurt, FoeBl
     pygame.time.delay(1000)
 
 def Phase2(boss, turn):
+    buttonCooldown = False
     DISPLAYSURF.fill(white)
     PlayerIdle.draw(DISPLAYSURF)
     JoelIdle.draw(DISPLAYSURF)
     SpeechBox.draw(DISPLAYSURF)
-    SlowText2(Finale0, 100, 800)
+    SlowText2(Finale0, 100, 675)
     pygame.time.delay(1000)
     SpeechBox.draw(DISPLAYSURF)
-    SlowText2(Finale1.text, 100, 800)
+    SlowText2(Finale1.text, 100, 675)
     pygame.time.delay(1000)
     SelectButtons = [AttackButton, BlockButton]
     AttackButtons = [RockButton, PaperButton, ScissorsButton, BackButton]
@@ -852,7 +1024,7 @@ def Phase2(boss, turn):
     PlayerHealthBar[player.health].draw(DISPLAYSURF)
     BossHealthBar1.draw(DISPLAYSURF)
     draw_text(boss.name, temp_font, black, 1125, 70)
-    draw_text("Player", temp_font, black, 425, 320)
+    draw_text("Player", temp_font, black, 325, 220)
     pygame.display.update()
     while True:
         if menu == "select":
@@ -890,7 +1062,7 @@ def Phase2(boss, turn):
                         if BlockButton.selected and not buttonCooldown:
                             if turn == 3:
                                 SpeechBox.draw(DISPLAYSURF)
-                                SlowText2("You should really just finish the fight, lunch is about to start!", 100, 800)
+                                SlowText2("You should really just finish the fight, lunch is about to start!", 100, 675)
                                 pygame.time.delay(1000)
                             else:
                                 buttonCooldown = True
@@ -941,6 +1113,107 @@ def Phase2(boss, turn):
                             menu = "select"
                         if MysteryItemButton.selected and not buttonCooldown:
                             Finale()
+        if menu == "select":
+            ##### Controller Select Buttons
+            if (GPIO.input(UpButton) == GPIO.HIGH) and not buttonCooldown:
+                buttonCooldown = True
+                ChangingButtons(SelectButtons, 1)
+                pygame.time.delay(500)
+           
+            if (GPIO.input(DownButton) == GPIO.HIGH) and not buttonCooldown:
+                buttonCooldown = True
+                ChangingButtons(SelectButtons, -1)
+                pygame.time.delay(500)
+
+            if (GPIO.input(UpButton) == GPIO.LOW) and not buttonCooldown:
+                buttonCooldown = False
+           
+            if (GPIO.input(DownButton) == GPIO.LOW) and not buttonCooldown:
+                buttonCooldown = False
+
+            if (GPIO.input(SelectButton) == GPIO.HIGH) and AttackButton.selected:
+                buttonCooldown = False
+                menu = "attack"
+               
+            if (GPIO.input(SelectButton) == GPIO.HIGH) and BlockButton.selected:
+                if turn == 3:
+                    SpeechBox.draw(DISPLAYSURF)
+                    SlowText2("You should really just finish the fight, lunch is about to start!", 100, 675)
+                    pygame.time.delay(1000)
+                else:
+                    buttonCooldown = True
+                    PlayerAction = "Block"
+                    FoeAction = "Block"
+                    turn += 1
+                    ThrowHands(PlayerAction, FoeAction, False, False, False, False, False, JoelIdle, JoelThrow, JoelHurt, JoelBlock, JoelRock, JoelPaper, JoelScissors, JoelBattleScript)
+        if menu == "attack" and turn != 3:
+             ##### Controller Select Buttons
+            if (GPIO.input(UpButton) == GPIO.HIGH) and not buttonCooldown:
+                buttonCooldown = True
+                ChangingButtons(AttackButtons, 1)
+                pygame.time.delay(500)
+           
+            if (GPIO.input(DownButton) == GPIO.HIGH) and not buttonCooldown:
+                buttonCooldown = True
+                ChangingButtons(AttackButtons, -1)
+                pygame.time.delay(500)
+
+            if (GPIO.input(UpButton) == GPIO.LOW) and not buttonCooldown:
+                buttonCooldown = False
+           
+            if (GPIO.input(DownButton) == GPIO.LOW) and not buttonCooldown:
+                buttonCooldown = False
+
+            if (GPIO.input(SelectButton) == GPIO.HIGH) and RockButton.selected:
+                buttonCooldown = True
+                PlayerAction = "Rock"
+                FoeAction = "Rock"
+                turn += 1
+                ThrowHands(PlayerAction, FoeAction, False, False, False, False, False, JoelIdle, JoelThrow, JoelHurt, JoelBlock, JoelRock, JoelPaper, JoelScissors, JoelBattleScript)
+
+            if (GPIO.input(SelectButton) == GPIO.HIGH) and PaperButton.selected:
+                buttonCooldown = True
+                PlayerAction = "Paper"
+                FoeAction = "Paper"
+                turn += 1
+                ThrowHands(PlayerAction, FoeAction, False, False, False, False, False, JoelIdle, JoelThrow, JoelHurt, JoelBlock, JoelRock, JoelPaper, JoelScissors, JoelBattleScript)
+
+            if (GPIO.input(SelectButton) == GPIO.HIGH) and ScissorsButton.selected:
+                buttonCooldown = True
+                PlayerAction = "Scissors"
+                FoeAction = "Scissors"
+                turn += 1
+                ThrowHands(PlayerAction, FoeAction, False, False, False, False, False, JoelIdle, JoelThrow, JoelHurt, JoelBlock, JoelRock, JoelPaper, JoelScissors, JoelBattleScript)
+            
+            if (GPIO.input(SelectButton) == GPIO.HIGH) and BackButton.selected:
+                buttonCooldown = True
+                menu = "select"
+
+        if menu == "attack" and turn >= 3:
+             ##### Controller Select Buttons
+            if (GPIO.input(UpButton) == GPIO.HIGH) and not buttonCooldown:
+                buttonCooldown = True
+                ChangingButtons(FinaleButtons, 1)
+                pygame.time.delay(500)
+           
+            if (GPIO.input(DownButton) == GPIO.HIGH) and not buttonCooldown:
+                buttonCooldown = True
+                ChangingButtons(FinaleButtons, -1)
+                pygame.time.delay(500)
+
+            if (GPIO.input(UpButton) == GPIO.LOW) and not buttonCooldown:
+                buttonCooldown = False
+           
+            if (GPIO.input(DownButton) == GPIO.LOW) and not buttonCooldown:
+                buttonCooldown = False
+
+            if (GPIO.input(SelectButton) == GPIO.HIGH) and BackButton.selected:
+                buttonCooldown = True
+                menu = "select"
+
+            if (GPIO.input(SelectButton) == GPIO.HIGH) and MysteryItemButton.selected:
+                Finale()
+
         if turn == 1 and not Finale2.displayed:
             FinaleBanterTurn1()
         if turn == 2 and not Finale5.displayed:
@@ -951,6 +1224,7 @@ def Phase2(boss, turn):
         pygame.display.update()
 
 def FinaleBanterTurn1():
+    buttonCooldown = False
     count = 0
     while True:
         for event in pygame.event.get():
@@ -961,21 +1235,24 @@ def FinaleBanterTurn1():
                     Quit()
                 if event.key != pygame.K_ESCAPE:
                     count += 1
+        if (GPIO.input(UpButton) == GPIO.HIGH) or (GPIO.input(DownButton) == GPIO.HIGH) or (GPIO.input(SelectButton) == GPIO.HIGH):
+            count += 1
         if count == 1:
             SpeechBox.draw(DISPLAYSURF)
-            SlowText(Finale2, 100, 800) if not Finale2.displayed else draw_text(Finale2.text, temp_font, black, 100, 800)
+            SlowText(Finale2, 100, 675) if not Finale2.displayed else draw_text(Finale2.text, temp_font, black, 100, 675)
         if count == 2:
             SpeechBox.draw(DISPLAYSURF)
-            SlowText(Finale3, 100, 800) if not Finale3.displayed else draw_text(Finale3.text, temp_font, black, 100, 800)
+            SlowText(Finale3, 100, 675) if not Finale3.displayed else draw_text(Finale3.text, temp_font, black, 100, 675)
         if count == 3:
             SpeechBox.draw(DISPLAYSURF)
-            SlowText(Finale4, 100, 800) if not Finale4.displayed else draw_text(Finale4.text, temp_font, black, 100, 800)
+            SlowText(Finale4, 100, 675) if not Finale4.displayed else draw_text(Finale4.text, temp_font, black, 100, 675)
         if count == 4:
             break
         clock.tick(60)
         pygame.display.update()
 
 def FinaleBanterTurn2():
+    buttonCooldown = False
     count = 0
     while True:
         for event in pygame.event.get():
@@ -986,21 +1263,24 @@ def FinaleBanterTurn2():
                     Quit()
                 if event.key != pygame.K_ESCAPE:
                     count += 1
+        if (GPIO.input(UpButton) == GPIO.HIGH) or (GPIO.input(DownButton) == GPIO.HIGH) or (GPIO.input(SelectButton) == GPIO.HIGH):
+            count += 1
         if count == 1:
             SpeechBox.draw(DISPLAYSURF)
-            SlowText(Finale5, 100, 800) if not Finale5.displayed else draw_text(Finale5.text, temp_font, black, 100, 800)
+            SlowText(Finale5, 100, 675) if not Finale5.displayed else draw_text(Finale5.text, temp_font, black, 100, 675)
         if count == 2:
             SpeechBox.draw(DISPLAYSURF)
-            SlowText(Finale6, 100, 800) if not Finale6.displayed else draw_text(Finale6.text, temp_font, black, 100, 800)
+            SlowText(Finale6, 100, 675) if not Finale6.displayed else draw_text(Finale6.text, temp_font, black, 100, 675)
         if count == 3:
             SpeechBox.draw(DISPLAYSURF)
-            SlowText(Finale7, 100, 800) if not Finale7.displayed else draw_text(Finale7.text, temp_font, black, 100, 800)
+            SlowText(Finale7, 100, 675) if not Finale7.displayed else draw_text(Finale7.text, temp_font, black, 100, 675)
         if count == 4:
             break
         clock.tick(60)
         pygame.display.update()
 
 def FinaleBanterTurn3():
+    buttonCooldown = False
     count = 0
     while True:
         for event in pygame.event.get():
@@ -1011,24 +1291,27 @@ def FinaleBanterTurn3():
                     Quit()
                 if event.key != pygame.K_ESCAPE:
                     count += 1
+        if (GPIO.input(UpButton) == GPIO.HIGH) or (GPIO.input(DownButton) == GPIO.HIGH) or (GPIO.input(SelectButton) == GPIO.HIGH):
+            count += 1
         if count == 1:
             SpeechBox.draw(DISPLAYSURF)
-            SlowText(Finale8, 100, 800) if not Finale8.displayed else draw_text(Finale8.text, temp_font, black, 100, 800)
+            SlowText(Finale8, 100, 675) if not Finale8.displayed else draw_text(Finale8.text, temp_font, black, 100, 675)
         if count == 2:
             SpeechBox.draw(DISPLAYSURF)
-            SlowText(Finale9, 100, 800) if not Finale9.displayed else draw_text(Finale9.text, temp_font, black, 100, 800)
+            SlowText(Finale9, 100, 675) if not Finale9.displayed else draw_text(Finale9.text, temp_font, black, 100, 675)
         if count == 3:
             SpeechBox.draw(DISPLAYSURF)
-            SlowText(Finale10, 100, 800) if not Finale10.displayed else draw_text(Finale10.text, temp_font, black, 100, 800)
+            SlowText(Finale10, 100, 675) if not Finale10.displayed else draw_text(Finale10.text, temp_font, black, 100, 675)
         if count == 4:
             SpeechBox.draw(DISPLAYSURF)
-            SlowText(Finale11, 100, 800) if not Finale11.displayed else draw_text(Finale11.text, temp_font, black, 100, 800)
+            SlowText(Finale11, 100, 675) if not Finale11.displayed else draw_text(Finale11.text, temp_font, black, 100, 675)
         if count == 5:
             break
         clock.tick(60)
         pygame.display.update()
 
 def Finale():
+    buttonCooldown = False
     for i in range(0, 3):
         DISPLAYSURF.fill(white)
         PlayerThrow.draw(DISPLAYSURF)
@@ -1054,18 +1337,20 @@ def Finale():
                     Quit()
                 if event.key != pygame.K_ESCAPE:
                     count += 1
+        if (GPIO.input(UpButton) == GPIO.HIGH) or (GPIO.input(DownButton) == GPIO.HIGH) or (GPIO.input(SelectButton) == GPIO.HIGH):
+            count += 1
         if count == 1:
             DwayneIntro.draw(DISPLAYSURF)
             AidenIntro.draw(DISPLAYSURF)
             FredIntro.draw(DISPLAYSURF)
             SpeechBox.draw(DISPLAYSURF)
-            SlowText(Finale12, 100, 800) if not Finale12.displayed else draw_text(Finale12.text, temp_font, black, 100, 800)
+            SlowText(Finale12, 100, 675) if not Finale12.displayed else draw_text(Finale12.text, temp_font, black, 100, 675)
         if count == 2:
             SpeechBox.draw(DISPLAYSURF)
-            SlowText(Finale13, 100, 800) if not Finale13.displayed else draw_text(Finale13.text, temp_font, black, 100, 800)
+            SlowText(Finale13, 100, 675) if not Finale13.displayed else draw_text(Finale13.text, temp_font, black, 100, 675)
         if count == 3:
             SpeechBox.draw(DISPLAYSURF)
-            SlowText(Finale14, 100, 800) if not Finale14.displayed else draw_text(Finale14.text, temp_font, black, 100, 800)
+            SlowText(Finale14, 100, 675) if not Finale14.displayed else draw_text(Finale14.text, temp_font, black, 100, 675)
         if count == 4:
             DISPLAYSURF.fill(white)
             DwayneIntro.draw(DISPLAYSURF)
@@ -1074,22 +1359,23 @@ def Finale():
             JoelIdle.draw(DISPLAYSURF)
             PlayerIdle.draw(DISPLAYSURF)
             SpeechBox.draw(DISPLAYSURF)
-            SlowText(Finale15, 100, 800) if not Finale15.displayed else draw_text(Finale15.text, temp_font, black, 100, 800)
+            SlowText(Finale15, 100, 675) if not Finale15.displayed else draw_text(Finale15.text, temp_font, black, 100, 675)
         if count == 5:
             SpeechBox.draw(DISPLAYSURF)
-            SlowText(Finale16, 100, 800) if not Finale16.displayed else draw_text(Finale16.text, temp_font, black, 100, 800)
+            SlowText(Finale16, 100, 675) if not Finale16.displayed else draw_text(Finale16.text, temp_font, black, 100, 675)
         if count == 6:
             SpeechBox.draw(DISPLAYSURF)
-            SlowText(Finale17, 100, 800) if not Finale17.displayed else draw_text(Finale17.text, temp_font, black, 100, 800)
+            SlowText(Finale17, 100, 675) if not Finale17.displayed else draw_text(Finale17.text, temp_font, black, 100, 675)
         if count == 7:
             break
         clock.tick(60)
         pygame.display.update()
     WinGame(GameWon)
-
+#need a change to commit nahudjkawbksjBDkjsAJKDASJ
 def LoseGame(script):
+    buttonCooldown = False
     SpeechBox.draw(DISPLAYSURF)
-    SlowText2(script, 100, 800)
+    SlowText2(script, 100, 675)
     count = 0
     while True:
         for event in pygame.event.get():
@@ -1100,10 +1386,12 @@ def LoseGame(script):
                     Quit()
                 if event.key != pygame.K_ESCAPE:
                     count += 1
+        if (GPIO.input(UpButton) == GPIO.HIGH) or (GPIO.input(DownButton) == GPIO.HIGH) or (GPIO.input(SelectButton) == GPIO.HIGH):
+            count += 1
         if count == 1:
             DISPLAYSURF.fill(black)
             SpeechBox.draw(DISPLAYSURF)
-            SlowText(GameOver, 100, 800) if not GameOver.displayed else draw_text(GameOver.text, temp_font, black, 100, 800)
+            SlowText(GameOver, 100, 675) if not GameOver.displayed else draw_text(GameOver.text, temp_font, black, 100, 675)
         if count == 2:
             break
         clock.tick(60)
@@ -1111,9 +1399,10 @@ def LoseGame(script):
     Reset()
 
 def WinGame(script):
+    buttonCooldown = False
     DISPLAYSURF.fill(black)
     SpeechBox.draw(DISPLAYSURF)
-    SlowText(script, 100, 800)
+    SlowText(script, 100, 675)
     count = 0
     while True:
         for event in pygame.event.get():
@@ -1124,6 +1413,8 @@ def WinGame(script):
                     Quit()
                 if event.key != pygame.K_ESCAPE:
                     count += 1
+        if (GPIO.input(UpButton) == GPIO.HIGH) or (GPIO.input(DownButton) == GPIO.HIGH) or (GPIO.input(SelectButton) == GPIO.HIGH):
+            count += 1
         if count == 1:
             break
         clock.tick(60)
@@ -1131,6 +1422,7 @@ def WinGame(script):
     Reset()
 
 def Credits():
+    buttonCooldown = False
     credits.draw(DISPLAYSURF)
     count = 0
     while True:
@@ -1142,6 +1434,8 @@ def Credits():
                     Quit()
                 if event.key != pygame.K_ESCAPE:
                     count += 1
+        if (GPIO.input(UpButton) == GPIO.HIGH) or (GPIO.input(DownButton) == GPIO.HIGH) or (GPIO.input(SelectButton) == GPIO.HIGH):
+            count += 1
         if count == 1:
             break
         clock.tick(60)
