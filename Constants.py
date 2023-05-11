@@ -17,7 +17,9 @@ bg = pygame.image.load('images/StartMenuBackgroundTest.png').convert_alpha()
 tiles = math.ceil(WIDTH/ bg.get_width()) + 1
 
 creditsImg = pygame.image.load('images/Credits.png').convert_alpha()
+
 credits = Image(0, 0, creditsImg, 0.5)
+credits = Image(0, 0, creditsImg, 1)
 ##### START MENU #####
 start_img = pygame.image.load('images/StartMenuButtons/StartButton.png').convert_alpha()
 start_hover = pygame.image.load('images/StartMenuButtons/StartButtonSelected.png').convert_alpha()
@@ -77,6 +79,11 @@ MysteryItemImgSelected = pygame.image.load('images/BattleAttackMenuButtons/Myste
 MysteryItemButton = Button(490, 680, MysteryItemImg, MysteryItemImgSelected, 0.75, True)
 BackButtonFinale = Button(825, 750, backImg, backImgSelected, 0.65, False)
 
+MysteryItemImg = pygame.image.load('images/BattleAttackMenuButtons/MysteryItem.png').convert_alpha()
+MysteryItemImgSelected = pygame.image.load('images/BattleAttackMenuButtons/MysteryItemSelected.png').convert_alpha()
+MysteryItemButton = Button(788, 785, MysteryItemImg, MysteryItemImgSelected, 1.01, True)
+BackButtonFinale = Button(1311, 785, backImg, backImgSelected, 1.01, False)
+
 ##### BAG MENU BUTTONS #####
 BagMenuBackButton = Button(825, 680, backImg, backImgSelected, 0.65, False)
 
@@ -99,6 +106,7 @@ BandAid0Img = pygame.image.load('images/BattleBagMenuButtons/BandageX0.png').con
 BandAid0ImgSelected = pygame.image.load('images/BattleBagMenuButtons/BandageX0Selected.png').convert_alpha()
 
 BandAid = Button(490, 680, BandAid5Img, BandAid5ImgSelected, 0.01, True)
+BandAid = Button(788, 785, BandAid5Img, BandAid5ImgSelected, 1, True)
 
 ##### IMAGE TO DISPLAY DIALOGUE ON #####
 textBoxImg = pygame.image.load('images/TextBox.png').convert_alpha()
@@ -156,6 +164,7 @@ enemytest = Image(1500, 100, enemyImg, 10)
 # Player battle images
 PlayerIdleImg = pygame.image.load('images/PlayerActions/PlayerStanding.png').convert_alpha()
 PlayerIdle = Image(100, 275, PlayerIdleImg, 5)
+PlayerIdle = Image(100, 400, PlayerIdleImg, 5)
 
 PlayerBlockImg = pygame.image.load('images/PlayerActions/PlayerBlock.png').convert_alpha()
 PlayerBlockPic = Image(100, 275 ,PlayerBlockImg, 5)
@@ -178,6 +187,11 @@ PlayerMysteryItem = Image(100, 275, PlayerMysteryItemImg, 5)
 PlayerHurtImg = pygame.image.load('images/PlayerActions/PlayerHurt.png').convert_alpha()
 PlayerHurt = Image(100, 275, PlayerHurtImg, 5)
 
+PlayerMysteryItem = Image(100, 400, PlayerMysteryItemImg, 5)
+
+PlayerHurtImg = pygame.image.load('images/PlayerActions/PlayerHurt.png').convert_alpha()
+PlayerHurt = Image(100, 400, PlayerHurtImg, 5)
+
 """
 # Enemy Test
 EnemyBlockImg = pygame.image.load('images/EnemyBlock.png').convert_alpha()
@@ -197,6 +211,7 @@ EnemyThrow = Image(1500, 100, EnemyThrowImg, 10)
 """
 ##### DWAYNE IMAGES #####
 DwayneIdleImg = pygame.image.load('images/Dwayne/Dwayne.png').convert_alpha()
+
 DwayneIdle = Image(1200, 100, DwayneIdleImg, 5)
 
 DwayneThrowImg = pygame.image.load('images/Dwayne/DwayneThrow.png').convert_alpha()
@@ -293,6 +308,7 @@ DwayneIntro = Image(200, 100, DwayneIdleImg, 5)
 
 ##### ENEMY HEALTH BAR #####
 BossHealthBar5Img = pygame.image.load('images/HealthBars/BossHealthBar5.png').convert_alpha()
+
 BossHealthBar5 = Image(900, 50, BossHealthBar5Img, 2)
 
 BossHealthBar4Img = pygame.image.load('images/HealthBars/BossHealthBar4.png').convert_alpha()
@@ -325,6 +341,7 @@ GruntHealthBar0 = Image(900, 50, GruntHealthBar0Img, 2)
 
 ##### PLAYER HEALTH BAR #####
 BigHealthBar7Img = pygame.image.load('images/HealthBars/PlayerHealthBar7.png').convert_alpha()
+
 PlayerHealthBarFull  = Image(400, 200, BigHealthBar7Img, 2)
 
 BigHealthBar6Img = pygame.image.load('images/HealthBars/PlayerHealthBar6.png').convert_alpha()
@@ -347,6 +364,31 @@ PlayerHealthBar1  = Image(400, 200, BigHealthBar1Img, 2)
 
 BigHealthBar0Img = pygame.image.load('images/HealthBars/PlayerHealthBar0.png').convert_alpha()
 PlayerHealthBarEmpty  = Image(400, 200, BigHealthBar0Img, 2)
+
+PlayerHealthBar = [PlayerHealthBarEmpty, PlayerHealthBar1, PlayerHealthBar2, PlayerHealthBar3, PlayerHealthBar4, PlayerHealthBar5, PlayerHealthBar6, PlayerHealthBarFull]
+PlayerHealthBarFull  = Image(400, 300, BigHealthBar7Img, 2)
+
+BigHealthBar6Img = pygame.image.load('images/HealthBars/PlayerHealthBar6.png').convert_alpha()
+PlayerHealthBar6  = Image(400, 300, BigHealthBar6Img, 2)
+
+BigHealthBar5Img = pygame.image.load('images/HealthBars/PlayerHealthBar5.png').convert_alpha()
+PlayerHealthBar5  = Image(400, 300, BigHealthBar5Img, 2)
+
+BigHealthBar4Img = pygame.image.load('images/HealthBars/PlayerHealthBar4.png').convert_alpha()
+PlayerHealthBar4  = Image(400, 300, BigHealthBar4Img, 2)
+
+BigHealthBar3Img = pygame.image.load('images/HealthBars/PlayerHealthBar3.png').convert_alpha()
+PlayerHealthBar3  = Image(400, 300, BigHealthBar3Img, 2)
+
+BigHealthBar2Img = pygame.image.load('images/HealthBars/PlayerHealthBar2.png').convert_alpha()
+PlayerHealthBar2  = Image(400, 300, BigHealthBar2Img, 2)
+
+BigHealthBar1Img = pygame.image.load('images/HealthBars/PlayerHealthBar1.png').convert_alpha()
+PlayerHealthBar1  = Image(400, 300, BigHealthBar1Img, 2)
+
+BigHealthBar0Img = pygame.image.load('images/HealthBars/PlayerHealthBar0.png').convert_alpha()
+PlayerHealthBarEmpty  = Image(400, 300, BigHealthBar0Img, 2)
+
 
 PlayerHealthBar = [PlayerHealthBarEmpty, PlayerHealthBar1, PlayerHealthBar2, PlayerHealthBar3, PlayerHealthBar4, PlayerHealthBar5, PlayerHealthBar6, PlayerHealthBarFull]
 
