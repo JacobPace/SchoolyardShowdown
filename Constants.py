@@ -15,6 +15,9 @@ FoeAction = None
 
 bg = pygame.image.load('images/StartMenuBackground.png').convert_alpha()
 tiles = math.ceil(WIDTH/ bg.get_width()) + 1
+
+creditsImg = pygame.image.load('images/Credits.png').convert_alpha()
+credits = Image(0, 0, creditsImg, 1)
 ##### START MENU #####
 start_img = pygame.image.load('images/StartMenuButtons/StartButton.png').convert_alpha()
 start_hover = pygame.image.load('images/StartMenuButtons/StartButtonSelected.png').convert_alpha()
@@ -69,6 +72,11 @@ backImg = pygame.image.load('images/BattleAttackMenuButtons/BackBattleButton.png
 backImgSelected = pygame.image.load('images/BattleAttackMenuButtons/BackBattleButtonSelected.png').convert_alpha()
 BackButton = Button(1309, 880, backImg, backImgSelected, 1.01, False)
 
+MysteryItemImg = pygame.image.load('images/BattleAttackMenuButtons/MysteryItem.png').convert_alpha()
+MysteryItemImgSelected = pygame.image.load('images/BattleAttackMenuButtons/MysteryItemSelected.png').convert_alpha()
+MysteryItemButton = Button(788, 785, MysteryItemImg, MysteryItemImgSelected, 1.01, True)
+BackButtonFinale = Button(1311, 785, backImg, backImgSelected, 1.01, False)
+
 ##### BAG MENU BUTTONS #####
 BagMenuBackButton = Button(1309, 785, backImg, backImgSelected, 1.01, False)
 
@@ -91,8 +99,6 @@ BandAid0Img = pygame.image.load('images/BattleBagMenuButtons/BandageX0.png').con
 BandAid0ImgSelected = pygame.image.load('images/BattleBagMenuButtons/BandageX0Selected.png').convert_alpha()
 
 BandAid = Button(788, 785, BandAid5Img, BandAid5ImgSelected, 1, True)
-
-
 
 ##### IMAGE TO DISPLAY DIALOGUE ON #####
 textBoxImg = pygame.image.load('images/TextBox.png').convert_alpha()
@@ -140,18 +146,16 @@ BlankResult = Image(190, 828, BlankResultImg, 1)
 
 ##### CHANGE PLAYER/ENEMY PICTURE IN FIGHT #####
 # initalize the player/enemy for testing purposes
-lil_dude = pygame.image.load('images/lil_dude.png').convert_alpha()
-player = Player(100,100, lil_dude) # taken areguments are the default x,y coordinates
-
+#lil_dude = pygame.image.load('images/lil_dude.png').convert_alpha()
+player = Player(100,100) # taken areguments are the default x,y coordinates
+"""
 enemyImg = pygame.image.load('images/enemy.png').convert_alpha()
-Ronald = Enemy("Ronald")
+#Ronald = Enemy("Ronald")
 enemytest = Image(1500, 100, enemyImg, 10)
-
-
-
+"""
 # Player battle images
-PlayerStandingImg = pygame.image.load('images/PlayerActions/PlayerStanding.png').convert_alpha()
-PlayerStanding = Image(100, 400, PlayerStandingImg, 5)
+PlayerIdleImg = pygame.image.load('images/PlayerActions/PlayerStanding.png').convert_alpha()
+PlayerIdle = Image(100, 400, PlayerIdleImg, 5)
 
 PlayerBlockImg = pygame.image.load('images/PlayerActions/PlayerBlock.png').convert_alpha()
 PlayerBlockPic = Image(100, 400 ,PlayerBlockImg, 5)
@@ -168,6 +172,13 @@ PlayerScissors = Image(100, 400, PlayerScissorsImg, 5)
 PlayerThrowImg = pygame.image.load('images/PlayerActions/PlayerThrow.png').convert_alpha()
 PlayerThrow = Image(100, 400, PlayerThrowImg, 5)
 
+PlayerMysteryItemImg = pygame.image.load('images/PlayerActions/PlayerMysteryItem2.png').convert_alpha()
+PlayerMysteryItem = Image(100, 400, PlayerMysteryItemImg, 5)
+
+PlayerHurtImg = pygame.image.load('images/PlayerActions/PlayerHurt.png').convert_alpha()
+PlayerHurt = Image(100, 400, PlayerHurtImg, 5)
+
+"""
 # Enemy Test
 EnemyBlockImg = pygame.image.load('images/EnemyBlock.png').convert_alpha()
 EnemyBlockPic = Image(1500, 100 ,EnemyBlockImg, 10)
@@ -183,14 +194,123 @@ EnemyScissors = Image(1500, 100, EnemyScissorsImg, 10)
 
 EnemyThrowImg = pygame.image.load('images/EnemyThrow.png').convert_alpha()
 EnemyThrow = Image(1500, 100, EnemyThrowImg, 10)
+"""
+##### DWAYNE IMAGES #####
+DwayneIdleImg = pygame.image.load('images/Dwayne/Dwayne.png').convert_alpha()
+DwayneIdle = Image(1500, 100, DwayneIdleImg, 5)
+
+DwayneThrowImg = pygame.image.load('images/Dwayne/DwayneThrow.png').convert_alpha()
+DwayneThrow =  Image(1500, 100, DwayneThrowImg, 5)
+
+DwayneRockImg = pygame.image.load('images/Dwayne/DwayneRock.png').convert_alpha()
+DwayneRock = Image(1500, 100, DwayneRockImg, 5)
+
+DwaynePaperImg = pygame.image.load('images/Dwayne/DwaynePaper.png').convert_alpha()
+DwaynePaper = Image(1500, 100, DwaynePaperImg, 5)
+
+DwayneScissorsImg = pygame.image.load('images/Dwayne/DwayneScissors.png').convert_alpha()
+DwayneScissors = Image(1500, 100, DwayneScissorsImg, 5)
+
+DwayneBlockImg = pygame.image.load('images/Dwayne/DwayneBlock.png').convert_alpha()
+DwayneBlock = Image(1500, 100, DwayneBlockImg, 5)
+
+DwayneHurtImg = pygame.image.load('images/Dwayne/DwayneHurt.png').convert_alpha()
+DwayneHurt = Image(1500, 100, DwayneHurtImg, 5)
+
+##### AIDEN IMAGES #####
+AidenIdleImg = pygame.image.load('images/Aiden/AidenIdle.png').convert_alpha()
+AidenIdle = Image(1500, 100, AidenIdleImg, 5)
+
+AidenThrowImg = pygame.image.load('images/Aiden/AidenThrow.png').convert_alpha()
+AidenThrow =  Image(1500, 100, AidenThrowImg, 5)
+
+AidenRockImg = pygame.image.load('images/Aiden/AidenRock.png').convert_alpha()
+AidenRock = Image(1500, 100, AidenRockImg, 5)
+
+AidenPaperImg = pygame.image.load('images/Aiden/AidenPaper.png').convert_alpha()
+AidenPaper = Image(1500, 100, AidenPaperImg, 5)
+
+AidenScissorsImg = pygame.image.load('images/Aiden/AidenScissors.png').convert_alpha()
+AidenScissors = Image(1500, 100, AidenScissorsImg, 5)
+
+AidenBlockImg = pygame.image.load('images/Aiden/AidenBlock.png').convert_alpha()
+AidenBlock = Image(1500, 100, AidenBlockImg, 5)
+
+AidenHurtImg = pygame.image.load('images/Aiden/AidenHurt.png').convert_alpha()
+AidenHurt = Image(1500, 100, AidenHurtImg, 5)
+
+##### FRED IMAGES #####
+FredIdleImg = pygame.image.load('images/Fred/FredIdle.png').convert_alpha()
+FredIdle = Image(1500, 100, FredIdleImg, 5)
+
+FredThrowImg = pygame.image.load('images/Fred/FredThrow.png').convert_alpha()
+FredThrow =  Image(1500, 100, FredThrowImg, 5)
+
+FredRockImg = pygame.image.load('images/Fred/FredRock.png').convert_alpha()
+FredRock = Image(1500, 100, FredRockImg, 5)
+
+FredPaperImg = pygame.image.load('images/Fred/FredPaper.png').convert_alpha()
+FredPaper = Image(1500, 100, FredPaperImg, 5)
+
+FredScissorsImg = pygame.image.load('images/Fred/FredScissors.png').convert_alpha()
+FredScissors = Image(1500, 100, FredScissorsImg, 5)
+
+FredBlockImg = pygame.image.load('images/Fred/FredBlock.png').convert_alpha()
+FredBlock = Image(1500, 100, FredBlockImg, 5)
+
+FredHurtImg = pygame.image.load('images/Fred/FredHurt.png').convert_alpha()
+FredHurt = Image(1500, 100, FredHurtImg, 5)
+
+##### JOEL IMAGES #####
+JoelIdleImg = pygame.image.load('images/Joel/JoelIdle.png').convert_alpha()
+JoelIdle = Image(1500, 100, JoelIdleImg, 5)
+
+JoelThrowImg = pygame.image.load('images/Joel/JoelThrow.png').convert_alpha()
+JoelThrow =  Image(1500, 100, JoelThrowImg, 5)
+
+JoelRockImg = pygame.image.load('images/Joel/JoelRock.png').convert_alpha()
+JoelRock = Image(1500, 100, JoelRockImg, 5)
+
+JoelPaperImg = pygame.image.load('images/Joel/JoelPaper.png').convert_alpha()
+JoelPaper = Image(1500, 100, JoelPaperImg, 5)
+
+JoelScissorsImg = pygame.image.load('images/Joel/JoelScissors.png').convert_alpha()
+JoelScissors = Image(1500, 100, JoelScissorsImg, 5)
+
+JoelBlockImg = pygame.image.load('images/Joel/JoelBlock.png').convert_alpha()
+JoelBlock = Image(1500, 100, JoelBlockImg, 5)
+
+JoelHurtImg = pygame.image.load('images/Joel/JoelHurt.png').convert_alpha()
+JoelHurt = Image(1500, 100, JoelHurtImg, 5)
+
+JoelShockImg = pygame.image.load('images/Joel/JoelShock.png').convert_alpha()
+JoelShock = Image(1500, 100, JoelShockImg, 5)
+
+##### Intro Images #####
+FredIntro = Image(600, 100, FredIdleImg, 5)
+AidenIntro = Image(400, 100, AidenIdleImg, 5)
+DwayneIntro = Image(200, 100, DwayneIdleImg, 5)
 
 ##### ENEMY HEALTH BAR #####
-GruntHealthBar5Img = pygame.image.load('images/HealthBars/GruntHealthBar5.png').convert_alpha()
-GruntHealthBar5 = Image(1100, 50, GruntHealthBar5Img, 2)
+BossHealthBar5Img = pygame.image.load('images/HealthBars/BossHealthBar5.png').convert_alpha()
+BossHealthBar5 = Image(1100, 50, BossHealthBar5Img, 2)
 
-GruntHealthBar4Img = pygame.image.load('images/HealthBars/GruntHealthBar4.png').convert_alpha()
-GruntHealthBar4 = Image(1100, 50, GruntHealthBar4Img, 2)
+BossHealthBar4Img = pygame.image.load('images/HealthBars/BossHealthBar4.png').convert_alpha()
+BossHealthBar4 = Image(1100, 50, BossHealthBar4Img, 2)
 
+BossHealthBar3Img = pygame.image.load('images/HealthBars/BossHealthBar3.png').convert_alpha()
+BossHealthBar3 = Image(1100, 50, BossHealthBar3Img, 2)
+
+BossHealthBar2Img = pygame.image.load('images/HealthBars/BossHealthBar2.png').convert_alpha()
+BossHealthBar2 = Image(1100, 50, BossHealthBar2Img, 2)
+
+BossHealthBar1Img = pygame.image.load('images/HealthBars/BossHealthBar1.png').convert_alpha()
+BossHealthBar1 = Image(1100, 50, BossHealthBar1Img, 2)
+
+BossHealthBar0Img = pygame.image.load('images/HealthBars/BossHealthBar0.png').convert_alpha()
+BossHealthBar0 = Image(1100, 50, BossHealthBar0Img, 2)
+
+# Grunt Health bar
 GruntHealthBar3Img = pygame.image.load('images/HealthBars/GruntHealthBar3.png').convert_alpha()
 GruntHealthBar3 = Image(1100, 50, GruntHealthBar3Img, 2)
 
@@ -204,32 +324,34 @@ GruntHealthBar0Img = pygame.image.load('images/HealthBars/GruntHealthBar0.png').
 GruntHealthBar0 = Image(1100, 50, GruntHealthBar0Img, 2)
 
 ##### PLAYER HEALTH BAR #####
-BigHealthBar7Img = pygame.image.load('images/HealthBars/BigHealthBar7.png').convert_alpha()
+BigHealthBar7Img = pygame.image.load('images/HealthBars/PlayerHealthBar7.png').convert_alpha()
 PlayerHealthBarFull  = Image(400, 300, BigHealthBar7Img, 2)
 
-BigHealthBar6Img = pygame.image.load('images/HealthBars/BigHealthBar6.png').convert_alpha()
+BigHealthBar6Img = pygame.image.load('images/HealthBars/PlayerHealthBar6.png').convert_alpha()
 PlayerHealthBar6  = Image(400, 300, BigHealthBar6Img, 2)
 
-BigHealthBar5Img = pygame.image.load('images/HealthBars/BigHealthBar5.png').convert_alpha()
+BigHealthBar5Img = pygame.image.load('images/HealthBars/PlayerHealthBar5.png').convert_alpha()
 PlayerHealthBar5  = Image(400, 300, BigHealthBar5Img, 2)
 
-BigHealthBar4Img = pygame.image.load('images/HealthBars/BigHealthBar4.png').convert_alpha()
+BigHealthBar4Img = pygame.image.load('images/HealthBars/PlayerHealthBar4.png').convert_alpha()
 PlayerHealthBar4  = Image(400, 300, BigHealthBar4Img, 2)
 
-BigHealthBar3Img = pygame.image.load('images/HealthBars/BigHealthBar3.png').convert_alpha()
+BigHealthBar3Img = pygame.image.load('images/HealthBars/PlayerHealthBar3.png').convert_alpha()
 PlayerHealthBar3  = Image(400, 300, BigHealthBar3Img, 2)
 
-BigHealthBar2Img = pygame.image.load('images/HealthBars/BigHealthBar2.png').convert_alpha()
+BigHealthBar2Img = pygame.image.load('images/HealthBars/PlayerHealthBar2.png').convert_alpha()
 PlayerHealthBar2  = Image(400, 300, BigHealthBar2Img, 2)
 
-BigHealthBar1Img = pygame.image.load('images/HealthBars/BigHealthBar1.png').convert_alpha()
+BigHealthBar1Img = pygame.image.load('images/HealthBars/PlayerHealthBar1.png').convert_alpha()
 PlayerHealthBar1  = Image(400, 300, BigHealthBar1Img, 2)
 
-BigHealthBar0Img = pygame.image.load('images/HealthBars/BigHealthBar0.png').convert_alpha()
+BigHealthBar0Img = pygame.image.load('images/HealthBars/PlayerHealthBar0.png').convert_alpha()
 PlayerHealthBarEmpty  = Image(400, 300, BigHealthBar0Img, 2)
 
+PlayerHealthBar = [PlayerHealthBarEmpty, PlayerHealthBar1, PlayerHealthBar2, PlayerHealthBar3, PlayerHealthBar4, PlayerHealthBar5, PlayerHealthBar6, PlayerHealthBarFull]
+
 ##### CHARACTERS #####
-Landon = RockGrunt("Landon")
+Dwayne = RockGrunt("Dwayne")
 Aiden = PaperGrunt("Aiden")
 Fred = ScissorsGrunt("Fred")
 Joel = Boss("Joel")

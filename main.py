@@ -6,9 +6,7 @@ from game import *
 from Dialouge import *
 import sys
 from random import randint
-from time import sleep
 from Constants import *
-import math
 pygame.init()
 
 # set some global variables
@@ -137,7 +135,7 @@ def StartMenu():
                     if start_button.action():
                         buttonCooldown = True
                         DISPLAYSURF.fill(white)
-                        BossRush()
+                        Intro()
                 if event.key == pygame.K_RETURN and exit_button.selected:
                     if exit_button.action():
                         Quit()
@@ -192,8 +190,7 @@ def pauseMenu():
         draw_text("Or press 'BACKSPACE' to return to the start menu!", temp_font, (0,0,0),55, 400)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.display.quit()
-                pygame.quit()
+                Quit()
                 break
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
@@ -218,9 +215,7 @@ def StoryMode():
         player.draw(DISPLAYSURF)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.display.quit()
-                pygame.quit()
-                break
+                Quit()
             
             ##### Movement / Pause Menu #####
             if event.type == pygame.KEYDOWN:
@@ -247,7 +242,6 @@ def StoryMode():
                 if event.key == pygame.K_d:
                     moveRight = False
 
-
         # Actual movement of player with border constraints
         if moveRight and player.x<WIDTH-player.width:
             player.x += 5
@@ -260,54 +254,214 @@ def StoryMode():
         
         pygame.display.update()
         clock.tick(60)
-           
-##### END OF CURRENT MAIN GAME LOOP #####  
+
+def Intro():
+    DISPLAYSURF.fill(white)
+    PlayerIdle.draw(DISPLAYSURF)
+    SpeechBox.draw(DISPLAYSURF)
+    SlowText2(Lore01, 100, 800)
+    iteration = 0
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                Quit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    Quit()
+                if event.key != pygame.K_ESCAPE:
+                    iteration += 1
+        if iteration == 1:
+            SpeechBox.draw(DISPLAYSURF)
+            SlowText(Lore0, 100, 800) if not Lore0.displayed else draw_text(Lore0.text, temp_font, black, 100, 800)
+        if iteration == 2:
+            JoelIdle.draw(DISPLAYSURF)
+            SpeechBox.draw(DISPLAYSURF)
+            SlowText(Lore1, 100, 800) if not Lore1.displayed else draw_text(Lore1.text, temp_font, black, 100, 800)
+        if iteration == 3:
+            DISPLAYSURF.fill(black)
+            SpeechBox.draw(DISPLAYSURF)
+            SlowText(Lore2, 100, 800) if not Lore2.displayed else draw_text(Lore2.text, temp_font, black, 100, 800)
+        if iteration == 4:
+            SpeechBox.draw(DISPLAYSURF)
+            SlowText(Lore3, 100, 800) if not Lore3.displayed else draw_text(Lore3.text, temp_font, black, 100, 800)
+        if iteration == 5:
+            DISPLAYSURF.fill(white)
+            PlayerIdle.draw(DISPLAYSURF)
+            JoelIdle.draw(DISPLAYSURF)
+            SpeechBox.draw(DISPLAYSURF)
+            SlowText(Lore4, 100, 800) if not Lore4.displayed else draw_text(Lore4.text, temp_font, black, 100, 800)
+        if iteration == 6:
+            SpeechBox.draw(DISPLAYSURF)
+            SlowText(Lore5, 100, 800) if not Lore5.displayed else draw_text(Lore5.text, temp_font, black, 100, 800)
+        if iteration == 7:
+            DwayneIntro.draw(DISPLAYSURF)
+            AidenIntro.draw(DISPLAYSURF)
+            FredIntro.draw(DISPLAYSURF)
+            SpeechBox.draw(DISPLAYSURF)
+            SlowText(Lore6, 100, 800) if not Lore6.displayed else draw_text(Lore6.text, temp_font, black, 100, 800)
+        if iteration == 8:
+            SpeechBox.draw(DISPLAYSURF)
+            SlowText(Lore7, 100, 800) if not Lore7.displayed else draw_text(Lore7.text, temp_font, black, 100, 800)
+        if iteration == 9:
+            SpeechBox.draw(DISPLAYSURF)
+            SlowText(Lore8, 100, 800) if not Lore8.displayed else draw_text(Lore8.text, temp_font, black, 100, 800)
+        if iteration == 10:
+            SpeechBox.draw(DISPLAYSURF)
+            SlowText(Lore9, 100, 800) if not Lore9.displayed else draw_text(Lore9.text, temp_font, black, 100, 800)
+        if iteration == 11:
+            SpeechBox.draw(DISPLAYSURF)
+            SlowText(Lore10, 100, 800) if not Lore10.displayed else draw_text(Lore10.text, temp_font, black, 100, 800)
+        if iteration == 12:
+            SpeechBox.draw(DISPLAYSURF)
+            SlowText(Lore11, 100, 800) if not Lore11.displayed else draw_text(Lore11.text, temp_font, black, 100, 800)
+        if iteration == 13:
+            SpeechBox.draw(DISPLAYSURF)
+            SlowText(Lore12, 100, 800) if not Lore12.displayed else draw_text(Lore12.text, temp_font, black, 100, 800)
+        if iteration == 14:
+            break
+        clock.tick(60)
+        pygame.display.update()
+    BossRush()
 
 ##### BOSS RUSH MODE #####
 def BossRush():
-    Battle(Ronald, None)
-
-def Battle(foe, voiceLines):
-    voiceLines = None
+    cont = 0
     DISPLAYSURF.fill(white)
-    #BattleSelectionMenu.draw(DISPLAYSURF)
-    playerTest.draw(DISPLAYSURF)
-    enemytest.draw(DISPLAYSURF)
-    GruntHealthBar5.draw(DISPLAYSURF) if foe.type != "boss" else None
-    #draw_text(foe.name, temp_font, black, 1125, 125)
-    PlayerHealthBarFull.draw(DISPLAYSURF)
-    #draw_text("Player", temp_font, black, 425, 325)
-    #turn = 0
-    #for i in voiceLines:
-    #    SpeechBox.draw(DISPLAYSURF)
-    #    pygame.display.update()
-    #    SlowText2(i, 100, 850)
-    #    pygame.display.update()
-    #    sleep(2)
-    #    SpeechBox.draw(DISPLAYSURF)
-    #    pygame.display.update()
-    
-    BattleSelectMenu(foe)
+    DwayneIdle.draw(DISPLAYSURF)
+    PlayerIdle.draw(DISPLAYSURF)
+    SpeechBox.draw(DISPLAYSURF)
+    SlowText2(DwayneOpen0, 100, 800)
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                Quit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    Quit()
+                if event.key != pygame.K_ESCAPE:
+                    cont += 1
+        if cont == 1:
+            SpeechBox.draw(DISPLAYSURF)
+            SlowText(DwayneOpen1, 100, 800) if not DwayneOpen1.displayed else draw_text(DwayneOpen1.text, temp_font, black, 100, 800)
+        if cont == 2:
+            break
+        clock.tick(60)
+        pygame.display.update()
+    Battle(Dwayne, DwayneBattleScript, DwayneIdle, DwayneThrow, DwayneHurt, DwayneBlock, DwayneRock, DwaynePaper, DwayneScissors)
 
-def ThrowHands(PlayerAction, FoeAction, pBlock, fBlock, draw, playerWon, enemyWon):
+def Level2():
+    cont = 0
+    DISPLAYSURF.fill(white)
+    AidenIdle.draw(DISPLAYSURF)
+    PlayerIdle.draw(DISPLAYSURF)
+    SpeechBox.draw(DISPLAYSURF)
+    SlowText2(AidenOpen0, 100, 800)
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                Quit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    Quit()
+                if event.key != pygame.K_ESCAPE:
+                    cont += 1
+        if cont == 1:
+            SpeechBox.draw(DISPLAYSURF)
+            SlowText(AidenOpen1, 100, 800) if not AidenOpen1.displayed else draw_text(AidenOpen1.text, temp_font, black, 100, 800)
+        if cont == 2:
+            break
+        clock.tick(60)
+        pygame.display.update()
+    Battle(Aiden, AidenBattleScript, AidenIdle, AidenThrow, AidenHurt, AidenBlock, AidenRock, AidenPaper, AidenScissors)
+
+def Level3():
+    cont = 0
+    DISPLAYSURF.fill(white)
+    FredIdle.draw(DISPLAYSURF)
+    PlayerIdle.draw(DISPLAYSURF)
+    SpeechBox.draw(DISPLAYSURF)
+    SlowText2(FredOpen0, 100, 800)
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                Quit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    Quit()
+                if event.key != pygame.K_ESCAPE:
+                    cont += 1
+        if cont == 1:
+            SpeechBox.draw(DISPLAYSURF)
+            SlowText(FredOpen1, 100, 800) if not FredOpen1.displayed else draw_text(FredOpen1.text, temp_font, black, 100, 800)
+        if cont == 2:
+            SpeechBox.draw(DISPLAYSURF)
+            SlowText(FredOpen2, 100, 800) if not FredOpen2.displayed else draw_text(FredOpen2.text, temp_font, black, 100, 800)
+        if cont == 3:
+            break
+        clock.tick(60)
+        pygame.display.update()
+    Battle(Fred, FredBattleScript, FredIdle, FredThrow, FredHurt, FredBlock, FredRock, FredPaper, FredScissors)
+
+def BossFight():
+    cont = 0
+    DISPLAYSURF.fill(white)
+    JoelIdle.draw(DISPLAYSURF)
+    PlayerIdle.draw(DISPLAYSURF)
+    SpeechBox.draw(DISPLAYSURF)
+    SlowText2(JoelOpen0, 100, 800)
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                Quit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    Quit()
+                if event.key != pygame.K_ESCAPE:
+                    cont += 1
+        if cont == 1:
+            SpeechBox.draw(DISPLAYSURF)
+            SlowText(JoelOpen1, 100, 800) if not JoelOpen1.displayed else draw_text(JoelOpen1.text, temp_font, black, 100, 800)
+        if cont == 2:
+            SpeechBox.draw(DISPLAYSURF)
+            SlowText(JoelOpen2, 100, 800) if not JoelOpen2.displayed else draw_text(JoelOpen2.text, temp_font, black, 100, 800)
+        if cont == 3:
+            break
+        clock.tick(60)
+        pygame.display.update()
+    Battle(Joel, JoelBattleScript, JoelIdle, JoelThrow, JoelHurt, JoelBlock, JoelRock, JoelPaper, JoelScissors)
+
+def Battle(foe, script, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors):
+    DISPLAYSURF.fill(white)
+    PlayerIdle.draw(DISPLAYSURF)
+    FoeIdle.draw(DISPLAYSURF)
+    GruntHealthBar3.draw(DISPLAYSURF) if foe.type != "boss" else None
+    BossHealthBar5.draw(DISPLAYSURF) if foe.type == "boss" else None
+    PlayerHealthBarFull.draw(DISPLAYSURF)
+    draw_text(foe.name, temp_font, black, 1125, 70)
+    draw_text("Player", temp_font, black, 425, 320)
+    pygame.display.update()
+    BattleSelectMenu(foe, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors, script)
+
+def ThrowHands(PlayerAction, FoeAction, pBlock, fBlock, draw, playerWon, enemyWon, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors, script):
     for i in range(0, 3):
         ##### ITERATION #####
         DISPLAYSURF.fill(white)
         PlayerThrow.draw(DISPLAYSURF)
-        EnemyThrow.draw(DISPLAYSURF)
-        pygame.time.wait(500)
+        FoeThrow.draw(DISPLAYSURF)
+        pygame.time.delay(500)
         pygame.display.update()
         DISPLAYSURF.fill(white)
         PlayerRock.draw(DISPLAYSURF)
-        enemytest.draw(DISPLAYSURF)
-        pygame.time.wait(500)
+        FoeRock.draw(DISPLAYSURF)
+        pygame.time.delay(500)
         pygame.display.update()              
         DISPLAYSURF.fill(white)
+    pygame.time.delay(1000)
     if draw:
-        EnemyRock.draw(DISPLAYSURF) if FoeAction == "Rock" else None
-        EnemyPaper.draw(DISPLAYSURF) if FoeAction == "Paper" else None
-        EnemyScissors.draw(DISPLAYSURF) if FoeAction == "Scissors" else None
-        EnemyBlockPic.draw(DISPLAYSURF) if FoeAction == "Block" else None
+        FoeRock.draw(DISPLAYSURF) if FoeAction == "Rock" else None
+        FoePaper.draw(DISPLAYSURF) if FoeAction == "Paper" else None
+        FoeScissors.draw(DISPLAYSURF) if FoeAction == "Scissors" else None
+        FoeBlock.draw(DISPLAYSURF) if FoeAction == "Block" else None
         PlayerRock.draw(DISPLAYSURF) if PlayerAction == "Rock" else None
         PlayerPaper.draw(DISPLAYSURF) if PlayerAction == "Paper" else None
         PlayerScissors.draw(DISPLAYSURF) if PlayerAction == "Scissors" else None
@@ -317,32 +471,35 @@ def ThrowHands(PlayerAction, FoeAction, pBlock, fBlock, draw, playerWon, enemyWo
         BlockButton.draw(DISPLAYSURF)
         BagButton.draw(DISPLAYSURF)
         BattleDraw.draw(DISPLAYSURF)
-        pygame.time.wait(500)
+        pygame.display.update()
+        pygame.time.delay(1500)
     elif PlayerAction == "Block" and not draw:
         if pBlock:
             PlayerBlockPic.draw(DISPLAYSURF)
-            EnemyRock.draw(DISPLAYSURF) if FoeAction == "Rock" else None
-            EnemyPaper.draw(DISPLAYSURF) if FoeAction == "Paper" else None
-            EnemyScissors.draw(DISPLAYSURF) if FoeAction == "Scissors" else None
+            FoeRock.draw(DISPLAYSURF) if FoeAction == "Rock" else None
+            FoePaper.draw(DISPLAYSURF) if FoeAction == "Paper" else None
+            FoeScissors.draw(DISPLAYSURF) if FoeAction == "Scissors" else None
             BattleSelectionMenu3.draw(DISPLAYSURF)
             AttackButton.draw(DISPLAYSURF)
             BlockButton.draw(DISPLAYSURF)
             BagButton.draw(DISPLAYSURF)
             PlayerBlocked.draw(DISPLAYSURF)
-            pygame.time.wait(500)
+            pygame.display.update()
+            pygame.time.delay(1500)
         elif not pBlock:
-            PlayerStanding.draw(DISPLAYSURF)
-            EnemyRock.draw(DISPLAYSURF) if FoeAction == "Rock" else None
-            EnemyPaper.draw(DISPLAYSURF) if FoeAction == "Paper" else None
-            EnemyScissors.draw(DISPLAYSURF) if FoeAction == "Scissors" else None
+            PlayerHurt.draw(DISPLAYSURF)
+            FoeRock.draw(DISPLAYSURF) if FoeAction == "Rock" else None
+            FoePaper.draw(DISPLAYSURF) if FoeAction == "Paper" else None
+            FoeScissors.draw(DISPLAYSURF) if FoeAction == "Scissors" else None
             BattleSelectionMenu3.draw(DISPLAYSURF)
             AttackButton.draw(DISPLAYSURF)
             BlockButton.draw(DISPLAYSURF)
             BagButton.draw(DISPLAYSURF)
             PlayerBlockFailed.draw(DISPLAYSURF)
-            pygame.time.wait(500)
+            pygame.display.update()
+            pygame.time.delay(1500)
     elif fBlock and not draw:
-        EnemyBlockPic.draw(DISPLAYSURF)
+        FoeBlock.draw(DISPLAYSURF)
         PlayerRock.draw(DISPLAYSURF) if PlayerAction == "Rock" else None
         PlayerPaper.draw(DISPLAYSURF) if PlayerAction == "Paper" else None
         PlayerScissors.draw(DISPLAYSURF) if PlayerAction == "Scissors" else None
@@ -351,25 +508,62 @@ def ThrowHands(PlayerAction, FoeAction, pBlock, fBlock, draw, playerWon, enemyWo
         BlockButton.draw(DISPLAYSURF)
         BagButton.draw(DISPLAYSURF)
         EnemyBlocked.draw(DISPLAYSURF)
-        pygame.time.wait(500)
+        pygame.display.update()
+        pygame.time.delay(1500)
     else:
-        EnemyRock.draw(DISPLAYSURF) if FoeAction == "Rock" else None
-        EnemyPaper.draw(DISPLAYSURF) if FoeAction == "Paper" else None
-        EnemyScissors.draw(DISPLAYSURF) if FoeAction == "Scissors" else None
+        FoeRock.draw(DISPLAYSURF) if FoeAction == "Rock" else None
+        FoePaper.draw(DISPLAYSURF) if FoeAction == "Paper" else None
+        FoeScissors.draw(DISPLAYSURF) if FoeAction == "Scissors" else None
         PlayerRock.draw(DISPLAYSURF) if PlayerAction == "Rock" else None
         PlayerPaper.draw(DISPLAYSURF) if PlayerAction == "Paper" else None
         PlayerScissors.draw(DISPLAYSURF) if PlayerAction == "Scissors" else None
-        pygame.time.wait(500)
+        pygame.time.delay(1500)
+        if playerWon:
+            FoeHurt.draw(DISPLAYSURF)
+        if enemyWon:
+            PlayerHurt.draw(DISPLAYSURF)
         BattleSelectionMenu3.draw(DISPLAYSURF)
         AttackButton.draw(DISPLAYSURF)
         BlockButton.draw(DISPLAYSURF)
         BagButton.draw(DISPLAYSURF)
         WonRound.draw(DISPLAYSURF) if playerWon else None
         LostRound.draw(DISPLAYSURF) if enemyWon else None
-    pygame.display.update()
-    
+        pygame.display.update()
+        pygame.time.delay(1500)
+    DISPLAYSURF.fill(white)
+    PlayerIdle.draw(DISPLAYSURF)
+    SpeechBox.draw(DISPLAYSURF)
+    FoeIdle.draw(DISPLAYSURF)
+    if draw:
+        SlowText2(script[0], 100, 800)
+    elif PlayerAction == "Block":
+        if pBlock:
+            SlowText2(script[randint(4, 6)], 100, 800)
+        elif not pBlock:
+            SlowText2(script[randint(1, 3)], 100, 800)
+    elif fBlock:
+        SlowText2(script[7], 100, 800)
+    elif not draw and PlayerAction != "Block" and not fBlock:
+        if playerWon:
+            SlowText2(script[randint(4, 6)], 100, 800)
+        if enemyWon:
+            SlowText2(script[randint(1, 3)], 100, 800)
+    count = 0
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                Quit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    Quit()
+                if event.key != pygame.K_ESCAPE:
+                    count += 1
+        if count == 1:
+            break
+        clock.tick(60)
+        pygame.display.update()
             
-def HealedResult(foe, FoeAction):
+def HealedResult(foe, FoeAction, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors, script):
     if player.health + 3 > 7:
         player.health = 7
     else:
@@ -377,50 +571,73 @@ def HealedResult(foe, FoeAction):
     for i in range(0, 3):
         ##### ITERATION #####
         DISPLAYSURF.fill(white)
-        EnemyThrow.draw(DISPLAYSURF)
-        pygame.time.wait(500)
+        PlayerIdle.draw(DISPLAYSURF)
+        FoeThrow.draw(DISPLAYSURF)
+        pygame.time.delay(500)
         pygame.display.update()
         DISPLAYSURF.fill(white)
-        enemytest.draw(DISPLAYSURF)
-        pygame.time.wait(500)
+        PlayerIdle.draw(DISPLAYSURF)
+        FoeRock.draw(DISPLAYSURF)
+        pygame.time.delay(500)
         pygame.display.update()              
         DISPLAYSURF.fill(white)
     FoeAction = foe.action()
     player.bandAids -= 1
-    EnemyRock.draw(DISPLAYSURF) if FoeAction == "Rock" else None
-    EnemyPaper.draw(DISPLAYSURF) if FoeAction == "Paper" else None
-    EnemyScissors.draw(DISPLAYSURF) if FoeAction == "Scissors" else None
-    EnemyBlockPic.draw(DISPLAYSURF) if FoeAction == "Block" else None
-    print(FoeAction)
-    pygame.display.update()
-    pygame.time.wait(1000)
-    BattleSelectMenu(foe)
+    PlayerIdle.draw(DISPLAYSURF)
+    if FoeAction != "Block":
+        FoeRock.draw(DISPLAYSURF) if FoeAction == "Rock" else None
+        FoePaper.draw(DISPLAYSURF) if FoeAction == "Paper" else None
+        FoeScissors.draw(DISPLAYSURF) if FoeAction == "Scissors" else None
+        player.health -= 1
+    FoeBlock.draw(DISPLAYSURF) if FoeAction == "Block" else None
+    count = 0
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                Quit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    Quit()
+                if event.key != pygame.K_ESCAPE:
+                    count += 1
+        if count == 1:
+            BattleSelectMenu(foe, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors, script)
+        clock.tick(60)
+        pygame.display.update()
 
-def BattleSelectMenu(foe):
+def BattleSelectMenu(foe, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors, script):
     DISPLAYSURF.fill(white)
-    PlayerStanding.draw(DISPLAYSURF)
-    enemytest.draw(DISPLAYSURF)
+    PlayerIdle.draw(DISPLAYSURF)
+    FoeIdle.draw(DISPLAYSURF)
     PlayerAction = ""
     FoeAction = ""
-    #FinalResult = ""
     SelectMenuButtons = [AttackButton, BlockButton, BagButton]
-    PlayerHealthBar = [PlayerHealthBarEmpty, PlayerHealthBar1, PlayerHealthBar2, PlayerHealthBar3, PlayerHealthBar4, PlayerHealthBar5, PlayerHealthBar6, PlayerHealthBarFull]
-    GruntHealthBar = [GruntHealthBar0, GruntHealthBar1, GruntHealthBar2, GruntHealthBar3, GruntHealthBar4, GruntHealthBar5]
-    #BossHealthBar = []
+    BossHealthBar = [BossHealthBar0, BossHealthBar1, BossHealthBar2, BossHealthBar3, BossHealthBar4, BossHealthBar5]
+    GruntHealthBar = [GruntHealthBar0, GruntHealthBar1, GruntHealthBar2, GruntHealthBar3]
+    BattleSelectionMenu3.draw(DISPLAYSURF)
+    AttackButton.draw(DISPLAYSURF)
+    BagButton.draw(DISPLAYSURF)
+    BlockButton.draw(DISPLAYSURF)
+    BossHealthBar[foe.health].draw(DISPLAYSURF) if foe.type == "boss" else None
+    GruntHealthBar[foe.health].draw(DISPLAYSURF) if foe.type != "boss" else None
+    PlayerHealthBar[player.health].draw(DISPLAYSURF)
+    draw_text(foe.name, temp_font, black, 1125, 70)
+    draw_text("Player", temp_font, black, 425, 320)
+    pygame.display.update()
     while True:
         BattleSelectionMenu3.draw(DISPLAYSURF)
         AttackButton.draw(DISPLAYSURF)
         BagButton.draw(DISPLAYSURF)
         BlockButton.draw(DISPLAYSURF)
+        draw_text(foe.name, temp_font, black, 1125, 70)
+        draw_text("Player", temp_font, black, 425, 320)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.quit()
-                pygame.display.quit()
+                Quit()
             if event.type == pygame.KEYDOWN:
                 buttonCooldown = False
                 if event.key == pygame.K_ESCAPE:
-                    pygame.quit()
-                    pygame.display.quit()
+                    Quit()
                 if event.key in menuCycleLeftUp and not buttonCooldown:
                     ChangingButtons(SelectMenuButtons, -1)
                     buttonCooldown = True
@@ -429,30 +646,53 @@ def BattleSelectMenu(foe):
                     buttonCooldown = True
                 if event.key == pygame.K_RETURN and not buttonCooldown and AttackButton.selected:
                     if AttackButton.action():
-                        BattleAttackMenu(foe)
+                        BattleAttackMenu(foe, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors, script)
                 if event.key == pygame.K_RETURN and not buttonCooldown and BlockButton.selected:
                     PlayerAction = "Block"
                     FoeAction = foe.action()
-                    RoundResults(foe, PlayerAction, FoeAction)
+                    RoundResults(foe, PlayerAction, FoeAction, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors, script)
                 if event.key == pygame.K_RETURN and not buttonCooldown and BagButton.selected:
                     if BagButton.action:
-                        BattleBagMenu(foe)
+                        BattleBagMenu(foe, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors, script)
 
             if foe.type != "boss":
+                GruntHealthBar[foe.health].draw(DISPLAYSURF)
                 if foe.health == 0:
-                    GruntHealthBar[0].draw(DISPLAYSURF)
-                if foe.health > 0:
-                    GruntHealthBar[foe.health].draw(DISPLAYSURF)
-            draw_text(foe.name, temp_font, black, 1125, 70)
+                    if foe.name == "Dwayne":
+                        SpeechBox.draw(DISPLAYSURF)
+                        SlowText2(DwayneLoseBattle, 100, 800)
+                        pygame.time.delay(2000)
+                        Level2()
+                    if foe.name == "Aiden":
+                        SpeechBox.draw(DISPLAYSURF)
+                        SlowText2(AidenLoseBattle, 100, 800)
+                        pygame.time.delay(2000)
+                        Level3()
+                    if foe.name == "Fred":
+                        SpeechBox.draw(DISPLAYSURF)
+                        SlowText2(FredLoseBattle, 100, 800)
+                        pygame.time.delay(2000)
+                        BossFight()
+            if foe.type == "boss":
+                BossHealthBar[foe.health].draw(DISPLAYSURF)
+                if foe.health == 1:
+                    Phase2(foe, turn)
             if player.health == 0:
-                PlayerHealthBar[0].draw(DISPLAYSURF)
-            if player.health > 0:
-                PlayerHealthBar[player.health].draw(DISPLAYSURF)
+                if foe.name == "Dwayne":
+                    LoseGame(DwayenWinBattle)
+                if foe.name == "Aiden":
+                    LoseGame(AidenWinBattle)
+                if foe.name == "Fred":
+                    LoseGame(FredWinBattle)
+                if foe.name == "Joel":
+                    LoseGame(JoelWinBattle)
+            PlayerHealthBar[player.health].draw(DISPLAYSURF)
+            draw_text(foe.name, temp_font, black, 1125, 70)
             draw_text("Player", temp_font, black, 425, 320)
             clock.tick(60)
             pygame.display.update()
 
-def BattleBagMenu(foe):
+def BattleBagMenu(foe, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors, script):
     BagButtons = [BandAid, BagMenuBackButton]
     BandAidImg = [BandAid0Img, BandAid1Img, BandAid2Img, BandAid3Img, BandAid4Img, BandAid5Img]
     BandAidImgSelected = [BandAid0ImgSelected, BandAid1ImgSelected, BandAid2ImgSelected, BandAid3ImgSelected, BandAid4ImgSelected, BandAid5ImgSelected]
@@ -475,22 +715,20 @@ def BattleBagMenu(foe):
                     buttonCooldown = True
                 if event.key == pygame.K_RETURN and not buttonCooldown and BagMenuBackButton.selected:
                     if BagMenuBackButton.action():
-                        BattleSelectMenu(foe)
+                        BattleSelectMenu(foe, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors, script)
                 if event.key == pygame.K_RETURN and not buttonCooldown and BandAid.selected:
                     if player.health == 7:
                         SpeechBox.draw(DISPLAYSURF)
 
                     elif BandAid.action():
                         FoeAction = foe.action
-                        HealedResult(foe, FoeAction)
+                        HealedResult(foe, FoeAction, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors, script)
         BandAid.image = BandAidImg[player.bandAids]
         BandAid.imgHover = BandAidImgSelected[player.bandAids]
         clock.tick(60)
         pygame.display.update()
         
-
-
-def BattleAttackMenu(foe):
+def BattleAttackMenu(foe, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors, script):
     PlayerAction = ""
     FoeAction = ""
     #FinalResult = ""
@@ -501,14 +739,6 @@ def BattleAttackMenu(foe):
         PaperButton.draw(DISPLAYSURF)
         ScissorsButton.draw(DISPLAYSURF)
         BackButton.draw(DISPLAYSURF)
-
-        if foe.health <= 0:
-            TextBox.draw(DISPLAYSURF)
-            SlowText(enemyLoss, 100, 850) if not enemyLoss.displayed else None
-            pygame.time.wait(2000)
-            TextBox.draw(DISPLAYSURF)
-            SlowText(victory, 100, 850) if not victory.displayed else None
-            draw_text(victoryAlt, temp_font,black, 100, 850)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -528,89 +758,200 @@ def BattleAttackMenu(foe):
                     if RockButton.action():
                         PlayerAction = "Rock"
                         FoeAction = foe.action()
-                        RoundResults(foe, PlayerAction, FoeAction)
+                        RoundResults(foe, PlayerAction, FoeAction, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors, script)
+                        pygame.time.delay(500)
+                        BattleSelectMenu(foe, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors, script)
                 if event.key == pygame.K_RETURN and PaperButton.selected and not buttonCooldown:
                     if PaperButton.action():
                         PlayerAction = "Paper"
                         FoeAction = foe.action()
-                        RoundResults(foe, PlayerAction, FoeAction)
+                        RoundResults(foe, PlayerAction, FoeAction, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors, script)
+                        pygame.time.delay(500)
+                        BattleSelectMenu(foe, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors, script)
                 if event.key == pygame.K_RETURN and ScissorsButton.selected and not buttonCooldown:
                     if ScissorsButton.action():
                         PlayerAction = "Scissors"
                         FoeAction = foe.action()
-                        RoundResults(foe, PlayerAction, FoeAction)
-                if event.key == pygame.K_RETURN and BlockButton.selected and not buttonCooldown:
-                    if BlockButton.action():
-                        PlayerAction = "Block"
-                        FoeAction = foe.action()
-                        RoundResults(foe, PlayerAction, FoeAction)
+                        RoundResults(foe, PlayerAction, FoeAction, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors, script)
+                        pygame.time.delay(500)
+                        BattleSelectMenu(foe, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors, script)
                 if event.key == pygame.K_RETURN and BackButton.selected and not buttonCooldown:
                     if BackButton.action:
-                        BattleSelectMenu(foe)
+                        pygame.time.delay(500)
+                        BattleSelectMenu(foe, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors, script)
         pygame.display.update()
         clock.tick(60)
 
-def RoundResults(foe, PlayerAction, FoeAction):
+def RoundResults(foe, PlayerAction, FoeAction, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors, script):
     if PlayerAction == "Heal":
         HealedResult(FoeAction)
-        FinalResult = "You healed!"
+        pygame.display.update()
     elif PlayerAction == FoeAction:
-        ThrowHands(PlayerAction, FoeAction, False, False, True, False, False)
-        FinalResult = "It's a draw?!"
+        ThrowHands(PlayerAction, FoeAction, False, False, True, False, False, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors, script)
+        pygame.display.update()
     elif PlayerAction == "Block":
         blockChance = randint(1, 10)
         if blockChance > 1:
-            ThrowHands(PlayerAction, FoeAction, True, False, False, False, False)
-            FinalResult = "You blocked it!"
+            ThrowHands(PlayerAction, FoeAction, True, False, False, False, False, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors, script)
+            pygame.display.update()
         elif blockChance == 1:
-            FinalResult = "Your block Failed!"
-            ThrowHands(PlayerAction, FoeAction, False, True, False, False, True)
+            ThrowHands(PlayerAction, FoeAction, False, True, False, False, True, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors, script)
             pygame.display.update()
             player.health -= 1
             pygame.display.update()
         elif FoeAction == "Block":
-            ThrowHands(PlayerAction, FoeAction, False, False, False, False, False)
-            FinalResult = "They blocked!"
+            ThrowHands(PlayerAction, FoeAction, False, False, False, False, False, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors, script)
             pygame.display.update()
 
     ##### PLAYER CHOOSE ROCK #####
     elif PlayerAction == "Rock" and FoeAction == "Paper":
-        ThrowHands(PlayerAction, FoeAction, False, False, False, False, True)
-        FinalResult = "That hurt!"
+        ThrowHands(PlayerAction, FoeAction, False, False, False, False, True, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors, script)
         player.health -= 1
     elif PlayerAction == "Rock" and FoeAction == "Scissors":
-        ThrowHands(PlayerAction, FoeAction, False, False, False, True, False)
-        FinalResult = "That'll show them!"
+        ThrowHands(PlayerAction, FoeAction, False, False, False, True, False, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors, script)
         pygame.display.update()
         foe.health -= 1
         
     ##### PLAYER CHOOSE PAPER #####
     elif PlayerAction == "Paper" and FoeAction == "Scissors":
-        ThrowHands(PlayerAction, FoeAction, False, False, False, False, True)
-        FinalResult = "That hurt!"
+        ThrowHands(PlayerAction, FoeAction, False, False, False, False, True, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors, script)
         pygame.display.update()
         player.health -= 1
     elif PlayerAction == "Paper" and FoeAction == "Rock":
-        ThrowHands(PlayerAction, FoeAction, False, False, False, True, False)
-        FinalResult = "That'll show them!"
+        ThrowHands(PlayerAction, FoeAction, False, False, False, True, False, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors, script)
         pygame.display.update()
         foe.health -= 1
 
     ##### PLAYER CHOOSE SCISSORS #####
     elif PlayerAction == "Scissors" and FoeAction == "Rock":
-        ThrowHands(PlayerAction, FoeAction, False, False, False, False, True)
-        FinalResult = "That hurt!"
+        ThrowHands(PlayerAction, FoeAction, False, False, False, False, True, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors, script)
         pygame.display.update()
         player.health -= 1
     elif PlayerAction == "Scissors" and FoeAction == "Paper":
-        ThrowHands(PlayerAction, FoeAction, False, False, False, True, False)
-        FinalResult = "That'll show them!"
+        ThrowHands(PlayerAction, FoeAction, False, False, False, True, False, FoeIdle, FoeThrow, FoeHurt, FoeBlock, FoeRock, FoePaper, FoeScissors, script)
         pygame.display.update()
         foe.health -= 1
-    pygame.time.wait(1000)
-    BattleSelectMenu(foe)
+    pygame.time.delay(1000)
 
 def Phase2(boss, turn):
+    DISPLAYSURF.fill(white)
+    PlayerIdle.draw(DISPLAYSURF)
+    JoelIdle.draw(DISPLAYSURF)
+    SpeechBox.draw(DISPLAYSURF)
+    SlowText2(Finale0, 100, 800)
+    pygame.time.delay(1000)
+    SpeechBox.draw(DISPLAYSURF)
+    SlowText2(Finale1.text, 100, 800)
+    pygame.time.delay(1000)
+    SelectButtons = [AttackButton, BlockButton]
+    AttackButtons = [RockButton, PaperButton, ScissorsButton, BackButton]
+    FinaleButtons = [MysteryItemButton, BackButtonFinale]
+    menu = "select"
+    PlayerAction = ""
+    FoeAction = ""
+    PlayerHealthBar[player.health].draw(DISPLAYSURF)
+    BossHealthBar1.draw(DISPLAYSURF)
+    draw_text(boss.name, temp_font, black, 1125, 70)
+    draw_text("Player", temp_font, black, 425, 320)
+    pygame.display.update()
+    while True:
+        if menu == "select":
+            BattleSelectionMenu2.draw(DISPLAYSURF)
+            AttackButton.draw(DISPLAYSURF)
+            BlockButton.draw(DISPLAYSURF)
+        if menu == "attack":
+            if turn < 3:
+                BattleSelectionMenu.draw(DISPLAYSURF)
+                RockButton.draw(DISPLAYSURF)
+                PaperButton.draw(DISPLAYSURF)
+                ScissorsButton.draw(DISPLAYSURF)
+                BackButton.draw(DISPLAYSURF)
+            if turn >= 3:
+                BattleSelectionMenu2.draw(DISPLAYSURF)
+                MysteryItemButton.draw(DISPLAYSURF)
+                BackButtonFinale.draw(DISPLAYSURF)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                Quit()
+            if event.type == pygame.KEYDOWN:
+                buttonCooldown = False
+                if event.key == pygame.K_ESCAPE:
+                    Quit()
+                if menu == "select":
+                    if event.key in menuCycleRightDown and not buttonCooldown:
+                        ChangingButtons(SelectButtons, 1)
+                        buttonCooldown = True
+                    if event.key in menuCycleLeftUp and not buttonCooldown:
+                        ChangingButtons(SelectButtons, -1)
+                    if event.key == pygame.K_RETURN:
+                        if AttackButton.selected and not buttonCooldown:
+                            buttonCooldown = True
+                            menu = "attack"
+                        if BlockButton.selected and not buttonCooldown:
+                            if turn == 3:
+                                SpeechBox.draw(DISPLAYSURF)
+                                SlowText2("You should really just finish the fight, lunch is about to start!", 100, 800)
+                                pygame.time.delay(1000)
+                            else:
+                                buttonCooldown = True
+                                PlayerAction = "Block"
+                                FoeAction = "Block"
+                                turn += 1
+                                ThrowHands(PlayerAction, FoeAction, False, False, False, False, False, JoelIdle, JoelThrow, JoelHurt, JoelBlock, JoelRock, JoelPaper, JoelScissors, JoelBattleScript)
+                if menu == "attack" and turn < 3:
+                    if event.key in menuCycleRightDown and not buttonCooldown:
+                        ChangingButtons(AttackButtons, 1)
+                        buttonCooldown = True
+                    if event.key in menuCycleLeftUp and not buttonCooldown:
+                        ChangingButtons(AttackButtons, -1)
+                    if event.key == pygame.K_RETURN:
+                        if BackButton.selected and not buttonCooldown:
+                            buttonCooldown = True
+                            menu = "select"
+                        if RockButton.selected and not buttonCooldown:
+                            buttonCooldown = True
+                            PlayerAction = "Rock"
+                            FoeAction = "Rock"
+                            turn += 1
+                            ThrowHands(PlayerAction, FoeAction, False, False, False, False, False, JoelIdle, JoelThrow, JoelHurt, JoelBlock, JoelRock, JoelPaper, JoelScissors, JoelBattleScript)
+                            menu = "select"
+                        if PaperButton.selected and not buttonCooldown:
+                            buttonCooldown = True
+                            PlayerAction = "Paper"
+                            FoeAction = "Paper"
+                            turn += 1
+                            ThrowHands(PlayerAction, FoeAction, False, False, False, False, False, JoelIdle, JoelThrow, JoelHurt, JoelBlock, JoelRock, JoelPaper, JoelScissors, JoelBattleScript)
+                            menu = "select"
+                        if ScissorsButton.selected and not buttonCooldown:
+                            buttonCooldown = True
+                            PlayerAction = "Scissors"
+                            FoeAction = "Scissors"
+                            turn += 1
+                            ThrowHands(PlayerAction, FoeAction, False, False, False, False, False, JoelIdle, JoelThrow, JoelHurt, JoelBlock, JoelRock, JoelPaper, JoelScissors, JoelBattleScript)
+                            menu = "select"
+                if menu == "attack" and turn >= 3:
+                    if event.key in menuCycleRightDown and not buttonCooldown:
+                        ChangingButtons(FinaleButtons, 1)
+                        buttonCooldown = True
+                    if event.key in menuCycleLeftUp and not buttonCooldown:
+                        ChangingButtons(FinaleButtons, -1)
+                    if event.key == pygame.K_RETURN:
+                        if BackButtonFinale.selected and not buttonCooldown:
+                            buttonCooldown = True
+                            menu = "select"
+                        if MysteryItemButton.selected and not buttonCooldown:
+                            Finale()
+        if turn == 1 and not Finale2.displayed:
+            FinaleBanterTurn1()
+        if turn == 2 and not Finale5.displayed:
+            FinaleBanterTurn2()
+        if turn == 3 and not Finale8.displayed:
+            FinaleBanterTurn3()
+        clock.tick(60)
+        pygame.display.update()
+
+def FinaleBanterTurn1():
+    count = 0
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -618,26 +959,202 @@ def Phase2(boss, turn):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     Quit()
-        if turn < 3:
-            pass
+                if event.key != pygame.K_ESCAPE:
+                    count += 1
+        if count == 1:
+            SpeechBox.draw(DISPLAYSURF)
+            SlowText(Finale2, 100, 800) if not Finale2.displayed else draw_text(Finale2.text, temp_font, black, 100, 800)
+        if count == 2:
+            SpeechBox.draw(DISPLAYSURF)
+            SlowText(Finale3, 100, 800) if not Finale3.displayed else draw_text(Finale3.text, temp_font, black, 100, 800)
+        if count == 3:
+            SpeechBox.draw(DISPLAYSURF)
+            SlowText(Finale4, 100, 800) if not Finale4.displayed else draw_text(Finale4.text, temp_font, black, 100, 800)
+        if count == 4:
+            break
         clock.tick(60)
         pygame.display.update()
 
-def LoseGame():
+def FinaleBanterTurn2():
+    count = 0
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                Quit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    Quit()
+                if event.key != pygame.K_ESCAPE:
+                    count += 1
+        if count == 1:
+            SpeechBox.draw(DISPLAYSURF)
+            SlowText(Finale5, 100, 800) if not Finale5.displayed else draw_text(Finale5.text, temp_font, black, 100, 800)
+        if count == 2:
+            SpeechBox.draw(DISPLAYSURF)
+            SlowText(Finale6, 100, 800) if not Finale6.displayed else draw_text(Finale6.text, temp_font, black, 100, 800)
+        if count == 3:
+            SpeechBox.draw(DISPLAYSURF)
+            SlowText(Finale7, 100, 800) if not Finale7.displayed else draw_text(Finale7.text, temp_font, black, 100, 800)
+        if count == 4:
+            break
+        clock.tick(60)
+        pygame.display.update()
+
+def FinaleBanterTurn3():
+    count = 0
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                Quit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    Quit()
+                if event.key != pygame.K_ESCAPE:
+                    count += 1
+        if count == 1:
+            SpeechBox.draw(DISPLAYSURF)
+            SlowText(Finale8, 100, 800) if not Finale8.displayed else draw_text(Finale8.text, temp_font, black, 100, 800)
+        if count == 2:
+            SpeechBox.draw(DISPLAYSURF)
+            SlowText(Finale9, 100, 800) if not Finale9.displayed else draw_text(Finale9.text, temp_font, black, 100, 800)
+        if count == 3:
+            SpeechBox.draw(DISPLAYSURF)
+            SlowText(Finale10, 100, 800) if not Finale10.displayed else draw_text(Finale10.text, temp_font, black, 100, 800)
+        if count == 4:
+            SpeechBox.draw(DISPLAYSURF)
+            SlowText(Finale11, 100, 800) if not Finale11.displayed else draw_text(Finale11.text, temp_font, black, 100, 800)
+        if count == 5:
+            break
+        clock.tick(60)
+        pygame.display.update()
+
+def Finale():
+    for i in range(0, 3):
+        DISPLAYSURF.fill(white)
+        PlayerThrow.draw(DISPLAYSURF)
+        JoelThrow.draw(DISPLAYSURF)
+        pygame.display.update()
+        pygame.time.delay(500)
+        DISPLAYSURF.fill(white)
+        PlayerRock.draw(DISPLAYSURF)
+        JoelRock.draw(DISPLAYSURF)
+        pygame.display.update()
+        pygame.time.delay(500)
+        DISPLAYSURF.fill(white)
+        pygame.time.delay(500)
+    PlayerMysteryItem.draw(DISPLAYSURF)
+    JoelShock.draw(DISPLAYSURF)
+    count = 0
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                Quit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    Quit()
+                if event.key != pygame.K_ESCAPE:
+                    count += 1
+        if count == 1:
+            DwayneIntro.draw(DISPLAYSURF)
+            AidenIntro.draw(DISPLAYSURF)
+            FredIntro.draw(DISPLAYSURF)
+            SpeechBox.draw(DISPLAYSURF)
+            SlowText(Finale12, 100, 800) if not Finale12.displayed else draw_text(Finale12.text, temp_font, black, 100, 800)
+        if count == 2:
+            SpeechBox.draw(DISPLAYSURF)
+            SlowText(Finale13, 100, 800) if not Finale13.displayed else draw_text(Finale13.text, temp_font, black, 100, 800)
+        if count == 3:
+            SpeechBox.draw(DISPLAYSURF)
+            SlowText(Finale14, 100, 800) if not Finale14.displayed else draw_text(Finale14.text, temp_font, black, 100, 800)
+        if count == 4:
+            DISPLAYSURF.fill(white)
+            DwayneIntro.draw(DISPLAYSURF)
+            AidenIntro.draw(DISPLAYSURF)
+            FredIntro.draw(DISPLAYSURF)
+            JoelIdle.draw(DISPLAYSURF)
+            PlayerIdle.draw(DISPLAYSURF)
+            SpeechBox.draw(DISPLAYSURF)
+            SlowText(Finale15, 100, 800) if not Finale15.displayed else draw_text(Finale15.text, temp_font, black, 100, 800)
+        if count == 5:
+            SpeechBox.draw(DISPLAYSURF)
+            SlowText(Finale16, 100, 800) if not Finale16.displayed else draw_text(Finale16.text, temp_font, black, 100, 800)
+        if count == 6:
+            SpeechBox.draw(DISPLAYSURF)
+            SlowText(Finale17, 100, 800) if not Finale17.displayed else draw_text(Finale17.text, temp_font, black, 100, 800)
+        if count == 7:
+            break
+        clock.tick(60)
+        pygame.display.update()
+    WinGame(GameWon)
+
+def LoseGame(script):
+    SpeechBox.draw(DISPLAYSURF)
+    SlowText2(script, 100, 800)
+    count = 0
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                Quit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    Quit()
+                if event.key != pygame.K_ESCAPE:
+                    count += 1
+        if count == 1:
+            DISPLAYSURF.fill(black)
+            SpeechBox.draw(DISPLAYSURF)
+            SlowText(GameOver, 100, 800) if not GameOver.displayed else draw_text(GameOver.text, temp_font, black, 100, 800)
+        if count == 2:
+            break
+        clock.tick(60)
+        pygame.display.update()
     Reset()
 
-def WinGame():
+def WinGame(script):
+    DISPLAYSURF.fill(black)
+    SpeechBox.draw(DISPLAYSURF)
+    SlowText(script, 100, 800)
+    count = 0
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                Quit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    Quit()
+                if event.key != pygame.K_ESCAPE:
+                    count += 1
+        if count == 1:
+            break
+        clock.tick(60)
+        pygame.display.update()
     Reset()
 
 def Credits():
+    credits.draw(DISPLAYSURF)
+    count = 0
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                Quit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    Quit()
+                if event.key != pygame.K_ESCAPE:
+                    count += 1
+        if count == 1:
+            break
+        clock.tick(60)
+        pygame.display.update()
     StartMenu()
 
 def Reset():
     player.health = 7
     player.bandAids = 5
-    Landon.health = 5
-    Aiden.health = 5
-    Fred.health = 5
-    Joel.health = 7
+    Dwayne.health = 3
+    Aiden.health = 3
+    Fred.health = 3
+    Joel.health = 5
+    Credits()
 
 StartMenu()
